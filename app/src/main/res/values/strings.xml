@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LookABook</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appName">LookABook</string>
+    <string name="signup">Signup</string>
+    <string name="you_have_an_account_log_in">You have an account? <b>Log-in</b></string>
+    <string name="skip_now"><![CDATA[skip now>]]></string>
+    <string name="login_with_google">Login with Google</string>
 </resources>
