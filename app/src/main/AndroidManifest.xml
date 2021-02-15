@@ -10,7 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LookABook">
-        <activity android:name=".SignupActivity"></activity>
+        <!-- Lock in Portrait -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".FirstScreenActivity">
             <intent-filter>
