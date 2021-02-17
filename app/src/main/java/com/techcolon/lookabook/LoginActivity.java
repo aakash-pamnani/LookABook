@@ -93,6 +93,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean loginAccount(String email, String password) {
 
+
+        emailLayout.setError(null);
+        passwordLayout.setError(null);
+
         if (!checkEmail(email)) {
             emailLayout.setError("This field has some error");
             return false;

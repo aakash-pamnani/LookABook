@@ -115,6 +115,10 @@ public class SignupActivity extends AppCompatActivity {
 
     private boolean createAccount(String firstName, String lastName, String email, String password) {
 
+        firstnameLayout.setError(null);
+        lastnameLayout.setError(null);
+        emailLayout.setError(null);
+        passwordLayout.setError(null);
 
         if (!checkName(firstName)) {
             firstnameLayout.setError("This field has some error");
@@ -122,6 +126,8 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             firstnameLayout.setError(null);
         }
+
+
         if (!checkName(lastName)) {
             lastnameLayout.setError("This field has some error");
             return false;
@@ -129,12 +135,16 @@ public class SignupActivity extends AppCompatActivity {
             lastnameLayout.setError(null);
 
         }
+
+
         if (!checkEmail(email)) {
             emailLayout.setError("This field has some error");
             return false;
         } else {
-            emailLayout.setError(null);
+
         }
+
+
         if (!checkPassword(password)) {
             passwordLayout.setError("This field has some error");
             return false;

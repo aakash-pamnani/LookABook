@@ -4,6 +4,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 class User {
 
     private static String email;
@@ -12,6 +14,8 @@ class User {
     private static FirebaseDatabase database; // splash screen
     private static FirebaseAuth mAuth; //splash screen
     private static FirebaseUser user;
+    private static ArrayList<Book> userBooks = new ArrayList<>();
+
 
     public static String getEmail() {
         return User.email;
@@ -62,34 +66,14 @@ class User {
         return User.database;
     }
 
-    protected static void loginUser(String email, String password) {
-
-
+    public static void addBooks(Book b) {
+        User.userBooks.add(b);
     }
 
-//    protected boolean signUpUser(String email, String password) {
-//
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            Log.d(TAG, "createUserWithEmail:success");
-//                            user = mAuth.getCurrentUser();
-//                            String userID = user.getUid();
-//
-//                        } else {
-//                            // If sign in fails, display a message to the user.
-//                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-//                            Toast.makeText(getContext(), "Login failed.",
-//                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-//                        }
-//
-//                        // ...
-//                    }
-//                });
-//    }
-
+    public static ArrayList<Book> getUserBooks() {
+        return userBooks;
+    }
 
 }
+
+    

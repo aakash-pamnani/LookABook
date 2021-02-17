@@ -48,7 +48,8 @@ public class FirstScreenActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();//splash screen
+
         if (user != null) {
             // User is signed in
             Intent i = new Intent(this, MainActivity.class);

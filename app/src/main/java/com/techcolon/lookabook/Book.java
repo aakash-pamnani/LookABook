@@ -1,24 +1,28 @@
 package com.techcolon.lookabook;
 
-import java.util.ArrayList;
-
 class Book {
 
     private String bookID;
-    private ArrayList<String> imageLinks;
+    // private ArrayList<String> imageLinks;
     private String titleOfBook;
-    private String ISBN;
+    private String isbn;
+    private String field;
     private String department;
-    private int semester;
+    private String semester;
     private String price;
     private String descriptionOfBook;
+    private String userID;
 
-    public Book(String titleOfBook, String ISBN, String department, int semester, String price, String descriptionOfBook) {
+    public Book(String bookID, String userID, String titleOfBook, String isbn, String department, String field, String semester, String price, String descriptionOfBook) {
         this.titleOfBook = titleOfBook;
         this.department = department;
         this.semester = semester;
         this.price = price;
         this.descriptionOfBook = descriptionOfBook;
+        this.isbn = isbn;
+        this.bookID = bookID;
+        this.userID = userID;
+        this.field = field;
     }
 
     public String getBookID() {
@@ -29,27 +33,34 @@ class Book {
         this.bookID = bookID;
     }
 
-    public ArrayList<String> getImageLinks() {
-        return imageLinks;
+    public String getUserID() {
+        return this.userID;
     }
 
-    public void setImageLinks(ArrayList<String> imageLinks) {
-        this.imageLinks = imageLinks;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
+    // public ArrayList<String> getImageLinks() {
+    //     return imageLinks;
+    // }
+
+    // public void setImageLinks(ArrayList<String> imageLinks) {
+    //     this.imageLinks = imageLinks;
+    // }
 
     public String getTitleOfBook() {
         return titleOfBook;
     }
 
     public String getISBN() {
-        return ISBN;
+        return isbn;
     }
 
     public String getDepartment() {
         return department;
     }
 
-    public int getSemester() {
+    public String getSemester() {
         return semester;
     }
 
