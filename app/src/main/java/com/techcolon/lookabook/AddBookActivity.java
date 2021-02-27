@@ -45,6 +45,8 @@ public class AddBookActivity extends AppCompatActivity {
         isbnTextView = findViewById(R.id.isbntextview);
         addBookBtn = findViewById(R.id.addbookbtn);
 
+
+        //make this 3 fields online on database
         String[] fields = {"Engineering"};
         String[] dept = {"Computer", "Mechanical", "Electrical"};
         String[] sem = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
@@ -66,13 +68,6 @@ public class AddBookActivity extends AppCompatActivity {
                 price = priceTextView.getEditText().getText().toString();
                 descriptionOfBook = descriptionTextView.getEditText().getText().toString();
 
-
-                fieldAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    }
-                });
 
                 fieldAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -130,7 +125,13 @@ public class AddBookActivity extends AppCompatActivity {
                 databaseReference.child("Books").child(bookId).setValue(currBook);
 
                 User.addBooks(currBook);
-                databaseReference.child("Users").child(userId).child("Books Added by User").setValue(bookId);
+
+                //adding bookid to user child
+                databaseReference.child("Users").child(userId).child("Books Added by User").child("Book" + (User.getNoOfBooks() + 1)).setValue(bookId);
+                User.setNoOfBooks(User.getNoOfBooks() + 1);
+                databaseReference.child("Users").child(userId).child("noOfBooks").setValue(User.getNoOfBooks());
+
+
                 Toast.makeText(AddBookActivity.this, "Book Added Successfully", Toast.LENGTH_SHORT).show();
                 finish();
 

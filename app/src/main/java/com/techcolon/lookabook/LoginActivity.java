@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     User.setUser(user);
+                                    User.getUserData();
                                     Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);
 

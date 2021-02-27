@@ -74,14 +74,15 @@ public class SignupActivity extends AppCompatActivity {
                                     User.setEmail(email);
                                     User.setFirstName(firstName);
                                     User.setLastName(lastName);
+                                    User.setNoOfBooks(0);
 
                                     myRef.child(userID);
 
                                     myRef = myRef.child(userID);
-                                    myRef.child("FirstName").setValue(firstName);
-                                    myRef.child("LastName").setValue(lastName);
-                                    myRef.child("Email").setValue(email);
-
+                                    myRef.child("FirstName").setValue(User.getFirstName());
+                                    myRef.child("LastName").setValue(User.getLastName());
+                                    myRef.child("Email").setValue(User.getEmail());
+                                    myRef.child("noOfBooks").setValue(User.getNoOfBooks());
 
                                     Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);

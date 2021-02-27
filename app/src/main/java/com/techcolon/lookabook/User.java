@@ -1,8 +1,13 @@
 package com.techcolon.lookabook;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -11,6 +16,7 @@ class User {
     private static String email;
     private static String firstName;
     private static String lastName;
+    private static int noOfBooks;
     private static FirebaseDatabase database; // splash screen
     private static FirebaseAuth mAuth; //splash screen
     private static FirebaseUser user;
@@ -74,6 +80,48 @@ class User {
         return userBooks;
     }
 
+    public static int getNoOfBooks() {
+        return noOfBooks;
+    }
+
+    public static void setNoOfBooks(int noOfBooks) {
+        User.noOfBooks = noOfBooks;
+    }
+
+    public static void getUserData() { //will be called when user loggedin
+        email = user.getEmail();
+
+        database.getReference().child("Users").child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                firstName = snapshot.child("FirstName").getValue(String.class);
+                lastName = snapshot.child("LastName").getValue(String.class);
+                noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
+
+                for (int i = 0; i < noOfBooks; i++) {
+                    String bookkey = snapshot.child("Books Added by User").child("Book" + (i + 1)).getValue(String.class);
+                    database.getReference().child("Books").child(bookkey).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            userBooks.add(snapshot.getValue(Book.class));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 }
 
     
