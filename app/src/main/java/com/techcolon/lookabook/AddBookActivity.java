@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 public class AddBookActivity extends AppCompatActivity {
 
     // Variables
-    String bookID;
+    String bookId;
     String bookTitle;
     String semesterOfBook;
     String isbn;
@@ -118,7 +118,7 @@ public class AddBookActivity extends AppCompatActivity {
 
                 DatabaseReference databaseReference = User.getFirebaseDatabase().getReference();
 
-                String bookId = databaseReference.push().getKey();
+                bookId = databaseReference.push().getKey();
                 String userId = User.getmAuth().getCurrentUser().getUid();
 
                 Book currBook = new Book(bookId, userId, bookTitle, isbn, departmentOfField, fieldOfBook, semesterOfBook, price, descriptionOfBook);
