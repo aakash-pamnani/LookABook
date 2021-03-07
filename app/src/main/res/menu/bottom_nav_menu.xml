@@ -9,6 +9,11 @@
         android:id="@+id/profileFragement"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
+    <item android:title="Add Book" />
+    <item
+        android:id="@+id/userBookListFragment"
+        android:icon="@drawable/ic_book"
+        android:title="Books" />
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"

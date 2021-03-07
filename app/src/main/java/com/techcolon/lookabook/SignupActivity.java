@@ -49,8 +49,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                //initialize firebase authentication in user class
-                User.intializemAuth(); //shift this to splash screen
+                //get mauth refrence
                 mAuth = User.getmAuth();
 
                 //method to check email and password with accounts and if valid user then update ui
@@ -66,7 +65,6 @@ public class SignupActivity extends AppCompatActivity {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     User.setUser(user);
                                     String userID = user.getUid();
-                                    User.initializeFirebaseDatabase(); // Shift this to Flash Screen
                                     // Write a message to the database
 
                                     DatabaseReference myRef = User.getFirebaseDatabase().getReference().child("Users");

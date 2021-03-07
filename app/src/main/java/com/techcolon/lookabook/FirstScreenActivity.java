@@ -24,7 +24,6 @@ public class FirstScreenActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data.getBooleanExtra("LoggedIn", false)) {
                     Intent i = new Intent(this, MainActivity.class);
-
                     startActivity(i);
                     finish();
                 } else {
@@ -35,7 +34,6 @@ public class FirstScreenActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data.getBooleanExtra("SignedUp", false)) {
                     Intent i = new Intent(this, MainActivity.class);
-
                     startActivity(i);
                     finish();
                 } else {

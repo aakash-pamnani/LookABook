@@ -51,8 +51,17 @@ class User {
         return mAuth;
     }
 
-    public static void intializemAuth() {
-        mAuth = FirebaseAuth.getInstance();
+
+    public static FirebaseDatabase getDatabase() {
+        return database;
+    }
+
+    public static void setDatabase(FirebaseDatabase database) {
+        User.database = database;
+    }
+
+    public static void setmAuth(FirebaseAuth mAuth) {
+        User.mAuth = mAuth;
     }
 
     public static FirebaseUser getUser() {
@@ -63,10 +72,6 @@ class User {
         User.user = user;
     }
 
-    public static void initializeFirebaseDatabase() {
-
-        User.database = FirebaseDatabase.getInstance();
-    }
 
     public static FirebaseDatabase getFirebaseDatabase() {
         return User.database;

@@ -46,10 +46,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                //initialize firebase authentication in user class
-                User.intializemAuth(); //move this to splash screen
-                mAuth = User.getmAuth();
-
                 //method to check email and password with accounts and if valid user then update ui
                 mAuth.signInWithEmailAndPassword(email, password)
 

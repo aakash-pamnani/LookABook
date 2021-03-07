@@ -10,25 +10,19 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
-        
-            
-        
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/toolbar_layout" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewbook"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addbookfabbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/default_layout_padding"
-            android:contentDescription=""
-            app:srcCompat="@drawable/ic_plus" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

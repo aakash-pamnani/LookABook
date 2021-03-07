@@ -34,7 +34,6 @@ public class AddBookActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
-        // remove bottom this after flash is created
 
         fieldAutoComplete = findViewById(R.id.fieldautocomplete);
         departmentAutoComplete = findViewById(R.id.departmentautocomplete);
@@ -113,8 +112,6 @@ public class AddBookActivity extends AppCompatActivity {
                     return;
                 }
 
-                User.initializeFirebaseDatabase(); //splach screen
-                User.intializemAuth();  // /splash screen//
 
                 DatabaseReference databaseReference = User.getFirebaseDatabase().getReference();
 

@@ -11,16 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
-    private ArrayList<Book> bookList = new ArrayList<>() ;
+    private ArrayList<Book> bookList = new ArrayList<>();
 
 
     //
-    public BookAdapter(ArrayList<Book> bookList) {
-        this.bookList = bookList;
+    public BookAdapter() {
+
     }
 
+    public void setBookList(ArrayList<Book> bookList) {
+        this.bookList.clear();
+        this.bookList.addAll(bookList);
+    }
 
     @NonNull
     @Override
