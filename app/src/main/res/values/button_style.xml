@@ -9,7 +9,7 @@
     </style>
 
 
-    <style name="LookABook.TextButon" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="LookABook.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">normal</item>
         <item name="textAllCaps">false</item>
