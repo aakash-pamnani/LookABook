@@ -1,7 +1,9 @@
 package com.techcolon.lookabook;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -9,23 +11,30 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.UploadTask;
 
 
 public class SignupActivity extends AppCompatActivity {
     private Button signUpButton;
     private TextInputLayout firstnameLayout, lastnameLayout, emailLayout, passwordLayout;
+    private ShapeableImageView profilePic;
     private FirebaseAuth mAuth;
     private String TAG = "SignUp";
-
+    private Uri profileUri = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         lastnameLayout = findViewById(R.id.lastname);
         emailLayout = findViewById(R.id.email);
         passwordLayout = findViewById(R.id.password);
-
+        profilePic = findViewById(R.id.profilepic) ;
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +91,7 @@ public class SignupActivity extends AppCompatActivity {
                                     myRef.child("Email").setValue(User.getEmail());
                                     myRef.child("noOfBooks").setValue(User.getNoOfBooks());
 
-                                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);
 
 
@@ -101,6 +110,11 @@ public class SignupActivity extends AppCompatActivity {
 
                 if (user != null) {
                     //if user is not empty
+
+                    if(profileUri != null)
+                        uploadProfilePic(profileUri);
+
+                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("SignedUp", true);
                     setResult(RESULT_OK, resultIntent);
@@ -108,6 +122,14 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     //if user is empty
                 }
+            }
+        });
+
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent,1);
             }
         });
     }
@@ -176,5 +198,32 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                profileUri = data.getData();
+                profilePic.setImageURI(profileUri);
+            }
+        }
+    }
+
+    private void uploadProfilePic(Uri profileUri){
+        User.getStorageReference().child(User.getUser().getUid()).putFile(profileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Some error occurred",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -1,5 +1,7 @@
 package com.techcolon.lookabook;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -8,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -21,7 +24,8 @@ class User {
     private static FirebaseAuth mAuth; //splash screen
     private static FirebaseUser user;
     private static ArrayList<Book> userBooks = new ArrayList<>();
-
+    private static StorageReference storageReference ;
+    private static Uri profileUri ;
 
     public static String getEmail() {
         return User.email;
@@ -91,6 +95,22 @@ class User {
 
     public static void setNoOfBooks(int noOfBooks) {
         User.noOfBooks = noOfBooks;
+    }
+
+    public static StorageReference getStorageReference() {
+        return storageReference;
+    }
+
+    public static void setStorageReference(StorageReference storageReference) {
+        User.storageReference = storageReference;
+    }
+
+    public static Uri getProfileUri() {
+        return profileUri;
+    }
+
+    public static void setProfileUri(Uri profileUri) {
+        User.profileUri = profileUri;
     }
 
     public static void getUserData() { //will be called when user loggedin

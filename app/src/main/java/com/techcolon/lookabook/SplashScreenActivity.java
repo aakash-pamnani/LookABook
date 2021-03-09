@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         User.setDatabase(FirebaseDatabase.getInstance());
         User.setmAuth(FirebaseAuth.getInstance());
-
+        User.setStorageReference(FirebaseStorage.getInstance().getReference());
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
