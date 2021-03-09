@@ -113,7 +113,7 @@ public class AddBookActivity extends AppCompatActivity {
                 }
 
 
-                DatabaseReference databaseReference = User.getFirebaseDatabase().getReference();
+                DatabaseReference databaseReference = User.getDatabase().getReference();
 
                 bookId = databaseReference.push().getKey();
                 String userId = User.getmAuth().getCurrentUser().getUid();

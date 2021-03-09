@@ -25,6 +25,7 @@
         android:layout_margin="24dp"
         android:hint="Email"
         app:errorEnabled="true"
+        style="@style/NoLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lastname">
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:hint="Password"
+        style="@style/NoLine"
         app:endIconMode="password_toggle"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"

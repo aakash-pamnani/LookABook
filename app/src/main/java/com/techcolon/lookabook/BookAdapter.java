@@ -65,7 +65,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
         @Override
         public void onClick(View v) {
-            Toast.makeText(itemView.getContext(), "You clicked "+ bookList.get(getLayoutPosition()-1).getTitleOfBook() , Toast.LENGTH_SHORT).show();
+            Toast.makeText(itemView.getContext(), "You clicked "+ bookList.get(getLayoutPosition()).getTitleOfBook() , Toast.LENGTH_SHORT).show();
         }
     }
 }

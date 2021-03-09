@@ -80,6 +80,22 @@ class Book {
         return price;
     }
 
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
     public String getDescriptionOfBook() {
         return descriptionOfBook;
     }
