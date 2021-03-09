@@ -18,24 +18,21 @@
         android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/firstname"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilepic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:srcCompat="@drawable/temp"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="@+id/signup"
-        app:layout_constraintTop_toBottomOf="@+id/signup"
-        android:layout_marginTop="24dp"
-        app:strokeColor="#A3B1C6"
         android:padding="2dp"
-        app:strokeWidth="4dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup"
+        app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/circleStyle"
-        />
+        app:srcCompat="@drawable/temp"
+        app:strokeWidth="4dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/firstname"
@@ -54,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="20"
-            android:background="@drawable/text_view_layout"
+
             android:inputType="textPersonName"
 
             />
@@ -78,8 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="20"
-            android:inputType="textPersonName"
-            android:background="@drawable/text_view_layout"/>
+            android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,8 +96,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:background="@drawable/text_view_layout"/>
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,14 +117,12 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:background="@drawable/text_view_layout"/>
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/signupbutton"
-        android:backgroundTint="#3C5898"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"

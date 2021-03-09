@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
                                     String userID = user.getUid();
                                     // Write a message to the database
 
-                                    DatabaseReference myRef = User.getFirebaseDatabase().getReference().child("Users");
+                                    DatabaseReference myRef = User.getDatabase().getReference().child("Users");
 
                                     User.setEmail(email);
                                     User.setFirstName(firstName);
@@ -91,7 +90,7 @@ public class SignupActivity extends AppCompatActivity {
                                     myRef.child("Email").setValue(User.getEmail());
                                     myRef.child("noOfBooks").setValue(User.getNoOfBooks());
 
-//                                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);
 
 
@@ -114,7 +113,6 @@ public class SignupActivity extends AppCompatActivity {
                     if(profileUri != null)
                         uploadProfilePic(profileUri);
 
-                    Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("SignedUp", true);
                     setResult(RESULT_OK, resultIntent);
@@ -213,7 +211,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void uploadProfilePic(Uri profileUri){
-        User.getStorageReference().child(User.getUser().getUid()).putFile(profileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).putFile(profileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 

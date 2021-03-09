@@ -77,10 +77,6 @@ class User {
     }
 
 
-    public static FirebaseDatabase getFirebaseDatabase() {
-        return User.database;
-    }
-
     public static void addBooks(Book b) {
         User.userBooks.add(b);
     }
