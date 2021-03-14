@@ -12,8 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
+import java.util.ArrayList;
 
 public class AddBookActivity extends AppCompatActivity {
+
 
     // Variables
     String bookId;
@@ -24,16 +29,41 @@ public class AddBookActivity extends AppCompatActivity {
     String fieldOfBook;
     String departmentOfField;
     String descriptionOfBook;
+    ArrayList<String> fieldsArray;
 
     // Resources
     private TextInputLayout bookTitleTextView, descriptionTextView, priceTextView, isbnTextView;
     private AutoCompleteTextView departmentAutoComplete, fieldAutoComplete, semesterAutoComplete;
     private Button addBookBtn;
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
+        fieldsArray = new ArrayList<>();
+
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+
+
+        String fieldsString = mFirebaseRemoteConfig.getString("fieldss");
+        Toast.makeText(this, fieldsString, Toast.LENGTH_SHORT).show();
+//        try {
+//            JSONArray fieldsJson = new JSONObject(fieldsString).getJSONArray("fields");
+//            Log.d("JSONPRINT", fieldsString.toString());
+//            String[] arr = fieldsJson.toString().replace("},{", " ,").split(" ");
+//            for(int i = 0 ; i < fieldsJson.length() ;i++) {
+//                fieldsArray.add(fieldsArray.get(i).toString());
+//            }
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
 
         fieldAutoComplete = findViewById(R.id.fieldautocomplete);
         departmentAutoComplete = findViewById(R.id.departmentautocomplete);
@@ -46,13 +76,13 @@ public class AddBookActivity extends AppCompatActivity {
 
 
         //make this 3 fields online on database
-        String[] fields = {"Engineering"};
+        // String[] fields = {"Engineering"};
         String[] dept = {"Computer", "Mechanical", "Electrical"};
         String[] sem = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-        ArrayAdapter arrayAdapterFields = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, fields);
-        ArrayAdapter arrayAdapterDepts = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, dept);
-        ArrayAdapter arrayAdapterSem = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, sem);
+        ArrayAdapter arrayAdapterFields = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fieldsArray);
+        ArrayAdapter arrayAdapterDepts = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dept);
+        ArrayAdapter arrayAdapterSem = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, sem);
 
         fieldAutoComplete.setAdapter(arrayAdapterFields);
         departmentAutoComplete.setAdapter(arrayAdapterDepts);
@@ -67,44 +97,35 @@ public class AddBookActivity extends AppCompatActivity {
                 price = priceTextView.getEditText().getText().toString();
                 descriptionOfBook = descriptionTextView.getEditText().getText().toString();
 
+                semesterOfBook = semesterAutoComplete.getText().toString();
+                departmentOfField = departmentAutoComplete.getText().toString();
+                fieldOfBook = fieldAutoComplete.getText().toString();
 
-                fieldAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        fieldOfBook = parent.getItemAtPosition(position).toString();
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        Toast.makeText(AddBookActivity.this, "Select Your Field", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                });
-
-                departmentAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        departmentOfField = parent.getItemAtPosition(position).toString();
-                    }
+                fieldAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        Toast.makeText(parent.getContext(), "Select Your Department", Toast.LENGTH_SHORT).show();
-                        return;
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        fieldOfBook = adapterView.getItemAtPosition(i).toString();
                     }
                 });
 
-                semesterAutoComplete.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                departmentAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        semesterOfBook = parent.getItemAtPosition(position).toString();
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        departmentOfField = adapterView.getItemAtPosition(i).toString();
+                    }
+                });
+
+                semesterAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        semesterOfBook = adapterView.getItemAtPosition(i).toString();
                     }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        Toast.makeText(parent.getContext(), "Select Your Semester", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                 });
 
 

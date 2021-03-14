@@ -1,14 +1,5 @@
 package com.techcolon.lookabook;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-
 class Book {
 
     private String bookID;
@@ -100,28 +91,5 @@ class Book {
         return descriptionOfBook;
     }
 
-    public static void getBooksFromDatabase(BookAdapter adapter) {
 
-        ArrayList<Book> books = new ArrayList<>();
-
-        FirebaseDatabase database = User.getDatabase();
-
-        database.getReference().child("Books").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    books.add(data.getValue(Book.class));
-                }
-                adapter.setBookList(books);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
 }

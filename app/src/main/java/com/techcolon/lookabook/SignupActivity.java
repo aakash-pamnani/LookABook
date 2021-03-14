@@ -29,11 +29,12 @@ import com.google.firebase.storage.UploadTask;
 
 public class SignupActivity extends AppCompatActivity {
     private Button signUpButton;
-    private TextInputLayout firstnameLayout, lastnameLayout, emailLayout, passwordLayout;
+    private TextInputLayout firstnameLayout, lastnameLayout, emailLayout, passwordLayout, phoneLayout;
     private ShapeableImageView profilePic;
     private FirebaseAuth mAuth;
     private String TAG = "SignUp";
     private Uri profileUri = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +44,19 @@ public class SignupActivity extends AppCompatActivity {
         lastnameLayout = findViewById(R.id.lastname);
         emailLayout = findViewById(R.id.email);
         passwordLayout = findViewById(R.id.password);
-        profilePic = findViewById(R.id.profilepic) ;
+        phoneLayout = findViewById(R.id.phonenumber);
+        profilePic = findViewById(R.id.profilepic);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email, password, firstName, lastName;
+                String email, password, firstName, lastName, phone;
                 firstName = firstnameLayout.getEditText().getText().toString();
                 lastName = lastnameLayout.getEditText().getText().toString();
                 email = emailLayout.getEditText().getText().toString();
                 password = passwordLayout.getEditText().getText().toString();
-                if (!createAccount(firstName, lastName, email, password)) {
+                phone = phoneLayout.getEditText().getText().toString();
+                if (!createAccount(firstName, lastName, email, password, phone)) {
                     return;
                 }
 
@@ -81,6 +84,7 @@ public class SignupActivity extends AppCompatActivity {
                                     User.setFirstName(firstName);
                                     User.setLastName(lastName);
                                     User.setNoOfBooks(0);
+                                    User.setPhoneNumber(phone);
 
                                     myRef.child(userID);
 
@@ -89,6 +93,8 @@ public class SignupActivity extends AppCompatActivity {
                                     myRef.child("LastName").setValue(User.getLastName());
                                     myRef.child("Email").setValue(User.getEmail());
                                     myRef.child("noOfBooks").setValue(User.getNoOfBooks());
+                                    myRef.child("PhoneNumber").setValue(User.getPhoneNumber());
+                                    myRef.child("ProfilePhotoUrl").setValue(null);
 
                                     Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);
@@ -132,12 +138,13 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    private boolean createAccount(String firstName, String lastName, String email, String password) {
+    private boolean createAccount(String firstName, String lastName, String email, String password, String phone) {
 
         firstnameLayout.setError(null);
         lastnameLayout.setError(null);
         emailLayout.setError(null);
         passwordLayout.setError(null);
+        phoneLayout.setError(null);
 
         if (!checkName(firstName)) {
             firstnameLayout.setError("This field has some error");
@@ -154,7 +161,12 @@ public class SignupActivity extends AppCompatActivity {
             lastnameLayout.setError(null);
 
         }
+        if (!checkPhone(phone)) {
+            phoneLayout.setError("Enter correct Phone Number");
+            return false;
+        } else {
 
+        }
 
         if (!checkEmail(email)) {
             emailLayout.setError("This field has some error");
@@ -182,6 +194,15 @@ public class SignupActivity extends AppCompatActivity {
         else {
             return (Patterns.EMAIL_ADDRESS.matcher(email).matches());
         }
+    }
+
+    private boolean checkPhone(String phone) {
+
+        if (phone == null)
+            return false;
+        else
+            return Patterns.PHONE.matcher(phone).matches();
+
     }
 
     private boolean checkPassword(String password) {
@@ -214,13 +235,13 @@ public class SignupActivity extends AppCompatActivity {
         User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).putFile(profileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                User.getDatabase().getReference().child("Users").child(User.getUser().getUid()).child("ProfilePhotoUrl").setValue(User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).getDownloadUrl());
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"Some error occurred",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Some error occurred while uploading Profile Photo", Toast.LENGTH_SHORT).show();
             }
         });
     }

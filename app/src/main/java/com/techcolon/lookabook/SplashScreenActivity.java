@@ -20,6 +20,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         User.setDatabase(FirebaseDatabase.getInstance());
         User.setmAuth(FirebaseAuth.getInstance());
         User.setStorageReference(FirebaseStorage.getInstance().getReference());
+        User.setUser(User.getmAuth().getCurrentUser());
+
+        if (User.getmAuth().getCurrentUser() != null) {
+            User.getUserData();
+        }
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

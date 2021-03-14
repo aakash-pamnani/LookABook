@@ -14,30 +14,15 @@
         android:id="@+id/profileFragement"
         android:name="com.techcolon.lookabook.ProfileFragement"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile_user" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.techcolon.lookabook.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.techcolon.lookabook.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.techcolon.lookabook.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        android:id="@+id/userBookListFragment"
+        android:name="com.techcolon.lookabook.UserBookListFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_user_book_list" />
 </navigation>

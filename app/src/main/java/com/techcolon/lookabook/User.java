@@ -1,7 +1,5 @@
 package com.techcolon.lookabook;
 
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 class User {
@@ -19,13 +18,22 @@ class User {
     private static String email;
     private static String firstName;
     private static String lastName;
-    private static int noOfBooks;
+    private static String phoneNumber;
+    private static int noOfBooks = 0;
     private static FirebaseDatabase database; // splash screen
     private static FirebaseAuth mAuth; //splash screen
     private static FirebaseUser user;
     private static ArrayList<Book> userBooks = new ArrayList<>();
-    private static StorageReference storageReference ;
-    private static Uri profileUri ;
+    private static StorageReference storageReference;
+    private static URL profilePhotoUrl;
+
+    public static URL getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    }
+
+    public static void setProfilePhotoUrl(URL profilePhotoUrl) {
+        User.profilePhotoUrl = profilePhotoUrl;
+    }
 
     public static String getEmail() {
         return User.email;
@@ -33,6 +41,14 @@ class User {
 
     public static void setEmail(String email) {
         User.email = email;
+    }
+
+    public static String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public static void setPhoneNumber(String phoneNumber) {
+        User.phoneNumber = phoneNumber;
     }
 
     public static String getFirstName() {
@@ -101,27 +117,24 @@ class User {
         User.storageReference = storageReference;
     }
 
-    public static Uri getProfileUri() {
-        return profileUri;
-    }
 
-    public static void setProfileUri(Uri profileUri) {
-        User.profileUri = profileUri;
-    }
 
     public static void getUserData() { //will be called when user loggedin
+
         email = user.getEmail();
 
-        database.getReference().child("Users").child(mAuth.getUid()).addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Users").child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 firstName = snapshot.child("FirstName").getValue(String.class);
                 lastName = snapshot.child("LastName").getValue(String.class);
+                profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(URL.class);
                 noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
+
 
                 for (int i = 0; i < noOfBooks; i++) {
                     String bookkey = snapshot.child("Books Added by User").child("Book" + (i + 1)).getValue(String.class);
-                    database.getReference().child("Books").child(bookkey).addValueEventListener(new ValueEventListener() {
+                    database.getReference().child("Books").child(bookkey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             userBooks.add(snapshot.getValue(Book.class));
