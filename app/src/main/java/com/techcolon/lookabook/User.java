@@ -129,6 +129,7 @@ class User {
                 firstName = snapshot.child("FirstName").getValue(String.class);
                 lastName = snapshot.child("LastName").getValue(String.class);
                 profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(URL.class);
+                phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
 
 
