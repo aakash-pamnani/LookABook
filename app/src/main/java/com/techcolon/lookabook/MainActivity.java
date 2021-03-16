@@ -37,8 +37,13 @@ public class MainActivity extends AppCompatActivity {
         addNewBookFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), AddBookActivity.class);
-                startActivity(i);
+                if(User.getmAuth().getCurrentUser()!=null) {
+                    Intent i = new Intent(getApplicationContext(), AddBookActivity.class);
+                    startActivity(i);
+                }
+                else {
+
+                }
             }
         });
 
