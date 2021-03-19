@@ -1,11 +1,13 @@
 package com.techcolon.lookabook;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -26,6 +28,7 @@ public class ProfileFragement extends Fragment {
     TextView noOfBooks;
     TextView phoneNumber;
     ShapeableImageView profilepic;
+    private Button loginBtn, signupBtn;
 
     public ProfileFragement() {
         // Required empty public constructor
@@ -88,11 +91,29 @@ public class ProfileFragement extends Fragment {
         } else {
             //if user null(not logged in)
             v = inflater.inflate(R.layout.fragment_profile_nouser, container, false);
-            toolbar = v.findViewById(R.id.topAppBar);
-            toolbar.setTitle("Login/Signup");
+            loginBtn = v.findViewById(R.id.login);
+            loginBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), LoginActivity.class);
+                    startActivityForResult(i, 1);
+                }
+            });
+
+            // SignUp button working
+            signupBtn = v.findViewById(R.id.signup);
+            signupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), SignupActivity.class);
+                    startActivityForResult(i, 2);
+                }
+            });
         }
 
 
         return v;
     }
+
+
 }
