@@ -28,8 +28,8 @@ public class ProfileFragement extends Fragment {
     TextView noOfBooks;
     TextView phoneNumber;
     ShapeableImageView profilepic;
-    private Button loginBtn, signupBtn;
-
+    private Button signupBtn;
+    private TextView loginBtn;
     public ProfileFragement() {
         // Required empty public constructor
     }
