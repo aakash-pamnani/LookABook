@@ -1,6 +1,7 @@
 package com.techcolon.lookabook;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,19 +44,18 @@ public class AddBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_book);
         fieldsArray = new ArrayList<>();
 
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(3600)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-
-
-        String fieldsString = mFirebaseRemoteConfig.getString("fieldss");
-        Toast.makeText(this, fieldsString, Toast.LENGTH_SHORT).show();
-//        try {
-//            JSONArray fieldsJson = new JSONObject(fieldsString).getJSONArray("fields");
-//            Log.d("JSONPRINT", fieldsString.toString());
-//            String[] arr = fieldsJson.toString().replace("},{", " ,").split(" ");
+//         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+//         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+//                 .setMinimumFetchIntervalInSeconds(3600)
+//                 .build();
+//         mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+//
+//
+//         String fieldsString = mFirebaseRemoteConfig.getString("fieldss");
+// //        try {
+// //            JSONArray fieldsJson = new JSONObject(fieldsString).getJSONArray("fields");
+// //            Log.d("JSONPRINT", fieldsString.toString());
+// //            String[] arr = fieldsJson.toString().replace("},{", " ,").split(" ");
 //            for(int i = 0 ; i < fieldsJson.length() ;i++) {
 //                fieldsArray.add(fieldsArray.get(i).toString());
 //            }
@@ -75,12 +75,12 @@ public class AddBookActivity extends AppCompatActivity {
         addBookBtn = findViewById(R.id.addbookbtn);
 
 
-        //make this 3 fields online on database
-        // String[] fields = {"Engineering"};
+//         make this 3 fields online on database
+        String[] fields = {"Engineering"};
         String[] dept = {"Computer", "Mechanical", "Electrical"};
         String[] sem = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-        ArrayAdapter arrayAdapterFields = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fieldsArray);
+        ArrayAdapter arrayAdapterFields = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fields);
         ArrayAdapter arrayAdapterDepts = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dept);
         ArrayAdapter arrayAdapterSem = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, sem);
 
@@ -152,7 +152,7 @@ public class AddBookActivity extends AppCompatActivity {
 
                 Toast.makeText(AddBookActivity.this, "Book Added Successfully", Toast.LENGTH_SHORT).show();
                 finish();
-
+                
             }
 
 

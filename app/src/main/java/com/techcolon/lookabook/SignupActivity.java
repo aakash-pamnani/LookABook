@@ -1,13 +1,16 @@
 package com.techcolon.lookabook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,8 +35,11 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout firstnameLayout, lastnameLayout, emailLayout, passwordLayout, phoneLayout;
     private ShapeableImageView profilePic;
     private FirebaseAuth mAuth;
+    private FrameLayout frame;
     private String TAG = "SignUp";
     private Uri profileUri = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,9 @@ public class SignupActivity extends AppCompatActivity {
         passwordLayout = findViewById(R.id.password);
         phoneLayout = findViewById(R.id.phonenumber);
         profilePic = findViewById(R.id.profilepic);
+        frame = findViewById(R.id.signupframelayout);
+
+        
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +105,12 @@ public class SignupActivity extends AppCompatActivity {
                                     myRef.child("PhoneNumber").setValue(User.getPhoneNumber());
                                     myRef.child("ProfilePhotoUrl").setValue(null);
 
+
                                     Toast.makeText(SignupActivity.this, "Signup Successfull", Toast.LENGTH_SHORT).show();
                                     updateUi(user);
-
-
-                                } else {
+                                    User.getUserData();
+                                }
+                                else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createAccountWithEmail:failure", task.getException());
 

@@ -96,7 +96,7 @@ public class ProfileFragement extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), LoginActivity.class);
-                    startActivityForResult(i, 1);
+                    startActivity(i);
                 }
             });
 
@@ -106,7 +106,7 @@ public class ProfileFragement extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), SignupActivity.class);
-                    startActivityForResult(i, 2);
+                    startActivity(i);
                 }
             });
         }
@@ -114,6 +114,7 @@ public class ProfileFragement extends Fragment {
 
         return v;
     }
+
 
 
 }

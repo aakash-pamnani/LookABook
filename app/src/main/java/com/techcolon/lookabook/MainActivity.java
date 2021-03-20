@@ -3,6 +3,7 @@ package com.techcolon.lookabook;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -38,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(User.getmAuth().getCurrentUser()!=null) {
-                    Intent i = new Intent(getApplicationContext(), AddBookActivity.class);
-                    startActivity(i);
+                       Intent i = new Intent(getApplicationContext(), AddBookActivity.class);
+                       startActivity(i);
                 }
                 else {
-
+                        Toast.makeText(MainActivity.this, "Login/SignUp First", Toast.LENGTH_SHORT).show();
+                        bottomNav.setSelectedItemId(R.id.profileFragement);
                 }
             }
         });
