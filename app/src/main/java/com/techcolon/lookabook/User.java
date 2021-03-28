@@ -121,7 +121,7 @@ class User {
 
     public static void getUserData() { //will be called when user loggedin
 
-        email = user.getEmail();
+
 
         database.getReference().child("Users").child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -131,6 +131,7 @@ class User {
                 profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(URL.class);
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
+                email = snapshot.child("Email").getValue(String.class);
 
 
                 for (int i = 0; i < noOfBooks; i++) {

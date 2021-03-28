@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "181483085111-36telfsfn4befiabthc9sqd4oqa5f1ml.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techcolon.lookabook",
+            "certificate_hash": "c8798f6754780208284aa7713a79322992278649"
+          }
+        },
+        {
           "client_id": "181483085111-5ff8qmhok45minjrc7v031io5h45vam9.apps.googleusercontent.com",
           "client_type": 3
         }

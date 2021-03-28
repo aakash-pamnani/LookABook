@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.io.IOException;
 
 public class ProfileFragement extends Fragment {
 
-    MaterialToolbar toolbar;
 
     TextView email;
     TextView firstName;
@@ -56,11 +54,6 @@ public class ProfileFragement extends Fragment {
             //user is not null(logged in)
 
             v = inflater.inflate(R.layout.fragment_profile_user, container, false);
-
-
-            toolbar = v.findViewById(R.id.topAppBar);
-            toolbar.setTitle("Profile");
-            toolbar.inflateMenu(R.menu.profile_fragment_menu);
 
 
             email = v.findViewById(R.id.emailtv);

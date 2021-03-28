@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="profile_photo_round" parent="">
+
+        <item name="android:shape">oval</item>
+        <item name="android:radius">24dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">50dp</item>
+
+    </style>
+
+</resources>

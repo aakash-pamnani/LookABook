@@ -7,13 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.appbar.MaterialToolbar;
-
 
 public class SettingsFragment extends Fragment {
 
-
-    MaterialToolbar toolbar;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -37,8 +33,6 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = null;
         v = inflater.inflate(R.layout.fragment_user_book_list, container, false);
-        toolbar = v.findViewById(R.id.topAppBar);
-        toolbar.setTitle("Settings");
 
 
         return v;

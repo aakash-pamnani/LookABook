@@ -8,11 +8,15 @@
     tools:context=".MainActivity">
 
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
         app:defaultNavHost="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -22,6 +26,7 @@
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bab"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

@@ -1,21 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".SignupActivity">
 
-    <include layout="@layout/toolbar_layout"
-        android:id="@+id/toolbar"/>
-    
-    <FrameLayout
-        android:id="@+id/signupframelayout"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/signupbutton"
+        app:layout_constraintEnd_toStartOf="@+id/signupbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="24dp"
+                android:layout_marginTop="28dp"
+                android:text="SIGN UP!"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profilepic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_profilepic"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_person_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstname"
+                style="@style/LookABook.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:hint="FirstName"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilepic">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastname"
+                style="@style/LookABook.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:hint="LastName"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email"
+                style="@style/LookABook.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:hint="Email"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email">
 
-</LinearLayout>
+                <AutoCompleteTextView
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:hint="+91"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/default_text_size"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phonenumber"
+                    style="@style/LookABook.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Phone Number"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/sendotp"
+                style="@style/LookABook.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:onClick="onSendOtp"
+                android:text="Send OTP" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:layout_marginVertical="24dp"
+                android:clickable="false"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="6">
+
+
+                <EditText
+                    android:id="@+id/otp1"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:focusedByDefault="true"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/otp2"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/otp2"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/otp3"
+                    android:textAlignment="center"
+
+
+                    />
+
+                <EditText
+                    android:id="@+id/otp3"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/otp4"
+                    android:textAlignment="center"
+
+
+                    />
+
+                <EditText
+                    android:id="@+id/otp4"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/otp5"
+                    android:textAlignment="center"
+
+
+                    />
+
+                <EditText
+                    android:id="@+id/otp5"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/otp6"
+                    android:textAlignment="center"
+
+
+                    />
+
+                <EditText
+                    android:id="@+id/otp6"
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:nextFocusRight="@id/signupbutton"
+                    android:textAlignment="center"
+
+
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/signupbutton"
+        style="@style/LookABook.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:text="SignUp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

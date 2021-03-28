@@ -65,8 +65,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone"
-                            android:focusedByDefault="true"/>
+                            android:focusedByDefault="true"
+                            android:inputType="phone" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,21 +84,25 @@
 
 
                     <EditText
+                        android:id="@+id/otp1"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
                         android:focusedByDefault="true"
+                        android:inputType="number"
                         android:maxLength="1"
                         android:textAlignment="center" />
 
                     <EditText
+                        android:id="@+id/otp2"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
+                        android:inputType="number"
                         android:maxLength="1"
                         android:textAlignment="center"
 
@@ -106,48 +110,56 @@
                         />
 
                     <EditText
+                        android:id="@+id/otp3"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
                         android:maxLength="1"
+                        android:inputType="number"
                         android:textAlignment="center"
 
 
                         />
 
                     <EditText
+                        android:id="@+id/otp4"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
                         android:maxLength="1"
+                        android:inputType="number"
                         android:textAlignment="center"
 
 
                         />
 
                     <EditText
+                        android:id="@+id/otp5"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
                         android:maxLength="1"
+                        android:inputType="number"
                         android:textAlignment="center"
 
 
                         />
 
                     <EditText
+                        android:id="@+id/otp6"
                         android:layout_width="40dp"
                         android:layout_height="42dp"
                         android:layout_marginHorizontal="12dp"
                         android:layout_weight="1"
                         android:background="@color/background"
                         android:maxLength="1"
+                        android:inputType="number"
                         android:textAlignment="center"
 
 
@@ -157,10 +169,8 @@
                 </LinearLayout>
 
 
-
-
                 <Button
-                    android:id="@+id/verify"
+                    android:id="@+id/generateotp"
                     style="@style/LookABook.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
