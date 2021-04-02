@@ -1,5 +1,7 @@
 package com.techcolon.lookabook;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,13 @@ import java.util.ArrayList;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHolder> {
 
     private ArrayList<Book> bookList = new ArrayList<>();
-
+    private Context isContext = null;
 
     //
-    public BookAdapter() {
-
+    public BookAdapter(Context isContext) {
+        this.isContext = isContext;
+    }
+    public BookAdapter(){
     }
 
 
@@ -112,7 +116,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(itemView.getContext(), "You clicked " + bookList.get(getLayoutPosition()).getTitleOfBook(), Toast.LENGTH_SHORT).show();
+                    if(isContext!=null){
+                        Intent intent = new Intent(isContext, SingleBookActivity.class);
+                        intent.putExtra("SingleBook",bookList.get(getLayoutPosition()));
+                        isContext.startActivity(intent);
+                    }
+//                    Toast.makeText(itemView.getContext(), "You clicked " + bookList.get(getLayoutPosition()).getTitleOfBook(), Toast.LENGTH_SHORT).show();
 
                 }
             });

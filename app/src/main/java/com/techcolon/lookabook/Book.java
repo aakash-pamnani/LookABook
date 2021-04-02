@@ -1,6 +1,8 @@
 package com.techcolon.lookabook;
 
-class Book {
+import java.io.Serializable;
+
+class Book implements Serializable {
 
     private String bookID;
     // private ArrayList<String> imageLinks;

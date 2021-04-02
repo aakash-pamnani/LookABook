@@ -239,7 +239,7 @@ public class SignupActivity extends AppCompatActivity {
         firstName = firstnameLayout.getEditText().getText().toString();
         lastName = lastnameLayout.getEditText().getText().toString();
         email = emailLayout.getEditText().getText().toString();
-        phone = phoneLayout.getEditText().toString();
+        phone = phoneLayout.getEditText().getText().toString();
         if (!createAccount(firstName, lastName, email, phone)) {
             return;
         }
@@ -260,13 +260,13 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
 
-                        String otp = phoneAuthCredential.getSmsCode();
-                        otp1.setText(otp.charAt(0));
-                        otp2.setText(otp.charAt(1));
-                        otp3.setText(otp.charAt(2));
-                        otp4.setText(otp.charAt(3));
-                        otp5.setText(otp.charAt(4));
-                        otp6.setText(otp.charAt(5));
+//                        String otp = phoneAuthCredential.getSmsCode();
+//                        otp1.setText(otp.charAt(0));
+//                        otp2.setText(otp.charAt(1));
+//                        otp3.setText(otp.charAt(2));
+//                        otp4.setText(otp.charAt(3));
+//                        otp5.setText(otp.charAt(4));
+//                        otp6.setText(otp.charAt(5));
 
 
                     }
@@ -292,35 +292,42 @@ public class SignupActivity extends AppCompatActivity {
 
     private void onVerify() {
 
+        if (!checkOtp()) {
+            Toast.makeText(SignupActivity.this, "Enter correct OTP", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String otp = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString() + otp5.getText().toString() + otp6.getText().toString();
+        phoneCredential = PhoneAuthProvider.getCredential(verification, otp);
+        if (phoneCredential != null) {
+            signUpBtn.setEnabled(true);
+//            onSignUpButton();
+        }
+
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (!checkOtp()) {
-                    Toast.makeText(SignupActivity.this, "Enter correct OTP", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String otp = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString() + otp5.getText().toString() + otp6.getText().toString();
-                phoneCredential = PhoneAuthProvider.getCredential(verification, otp);
                 if (phoneCredential != null) {
-                    signUpBtn.setEnabled(true);
+//                    signUpBtn.setEnabled(true);
                     onSignUpButton();
-                } else {
+                }
+                 else {
+                    signUpBtn.setEnabled(false);
                     Toast.makeText(SignupActivity.this, "Unable to Create Account", Toast.LENGTH_SHORT).show();
                 }
 
             }
 
-            private boolean checkOtp() {
 
-                if (otp1.getText().toString().length() == 0 || otp2.getText().toString().length() == 0 || otp3.getText().toString().length() == 0 || otp4.getText().toString().length() == 0 || otp5.getText().toString().length() == 0 || otp6.getText().toString().length() == 0) {
-                    return true;
-                }
-                return false;
-            }
         });
 
+    }
+    private boolean checkOtp() {
+
+        if (otp1.getText().toString().length() == 0 || otp2.getText().toString().length() == 0 || otp3.getText().toString().length() == 0 || otp4.getText().toString().length() == 0 || otp5.getText().toString().length() == 0 || otp6.getText().toString().length() == 0) {
+            return false;
+        }
+        return true;
     }
 
     private void onSignUpButton() {
@@ -373,6 +380,7 @@ public class SignupActivity extends AppCompatActivity {
                             Log.w(TAG, "createAccountWithEmail:failure", task.getException());
 
 //                            if(task.getException() instanceof )
+                            signUpBtn.setEnabled(false);
 
                             Toast.makeText(getApplicationContext(), "Unable To Create Account", Toast.LENGTH_SHORT).show();
 
