@@ -1,6 +1,7 @@
 package com.techcolon.lookabook;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -51,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout firstnameLayout, lastnameLayout, emailLayout, passwordLayout;
     private String TAG = "SignUp";
     private Uri profileUri = null;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,6 @@ public class SignupActivity extends AppCompatActivity {
 
 
         phoneLayout = findViewById(R.id.phonenumber);
-
 
         otp1 = findViewById(R.id.otp1);
         otp2 = findViewById(R.id.otp2);
@@ -236,6 +237,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSendOtp(View view) {
+
         firstName = firstnameLayout.getEditText().getText().toString();
         lastName = lastnameLayout.getEditText().getText().toString();
         email = emailLayout.getEditText().getText().toString();
@@ -243,6 +245,7 @@ public class SignupActivity extends AppCompatActivity {
         if (!createAccount(firstName, lastName, email, phone)) {
             return;
         }
+        showProgressDialog(true);
         onGenerateOtp();
     }
 
@@ -250,9 +253,6 @@ public class SignupActivity extends AppCompatActivity {
 
 
         phone = phoneLayout.getEditText().getText().toString();
-
-        User.setPhoneNumber(phone);
-
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + phone, 10, TimeUnit.SECONDS, this,
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -282,6 +282,8 @@ public class SignupActivity extends AppCompatActivity {
                         super.onCodeSent(verificationId, forcedResendingToken);
                         verification = verificationId;
                         Log.d("id", verificationId);
+                        signUpBtn.setEnabled(true);
+                        showProgressDialog(false) ;
                         onVerify();
 
                     }
@@ -292,23 +294,23 @@ public class SignupActivity extends AppCompatActivity {
 
     private void onVerify() {
 
-        if (!checkOtp()) {
-            Toast.makeText(SignupActivity.this, "Enter correct OTP", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        String otp = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString() + otp5.getText().toString() + otp6.getText().toString();
-        phoneCredential = PhoneAuthProvider.getCredential(verification, otp);
-        if (phoneCredential != null) {
-            signUpBtn.setEnabled(true);
-//            onSignUpButton();
-        }
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog(true);
+                if (!checkOtp()) {
+                    Toast.makeText(SignupActivity.this, "Enter correct OTP", Toast.LENGTH_SHORT).show();
+                    showProgressDialog(false);
+                    return;
+                }
+
+                String otp = otp1.getText().toString() + otp2.getText().toString() + otp3.getText().toString() + otp4.getText().toString() + otp5.getText().toString() + otp6.getText().toString();
+                phoneCredential = PhoneAuthProvider.getCredential(verification, otp);
+
+
                 if (phoneCredential != null) {
-//                    signUpBtn.setEnabled(true);
                     onSignUpButton();
                 }
                  else {
@@ -386,7 +388,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
                         }
-
+                        showProgressDialog(false);
                     }
 
                     private void updateUi(FirebaseUser user) {
@@ -514,5 +516,16 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    private void showProgressDialog(Boolean show){
+        if(show) {
+            progressDialog = new ProgressDialog(SignupActivity.this);
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
 
+        }
+        else{
+            progressDialog.cancel();
+        }
+    }
 }

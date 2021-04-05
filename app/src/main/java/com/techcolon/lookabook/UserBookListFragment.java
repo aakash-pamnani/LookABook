@@ -42,7 +42,7 @@ public class UserBookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = null;
-        if (User.getmAuth().getCurrentUser() != null) {
+        if (User.getUser() != null) {
             //user is not null(logged in)
             v = inflater.inflate(R.layout.fragment_user_book_list, container, false);
             rcvId = v.findViewById(R.id.rcvid);
@@ -55,7 +55,7 @@ public class UserBookListFragment extends Fragment {
 
                 rcv = v.findViewById(R.id.recyclerviewbook);
 
-                mAdapter = new BookAdapter();
+                mAdapter = new BookAdapter(getContext());
                 mAdapter.addData(User.getUserBooks());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
                 rcv.setLayoutManager(layoutManager);

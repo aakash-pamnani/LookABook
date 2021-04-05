@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = null;
-        v = inflater.inflate(R.layout.fragment_user_book_list, container, false);
+        v = inflater.inflate(R.layout.fragment_settings, container, false);
 
 
         return v;

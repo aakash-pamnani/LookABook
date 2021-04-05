@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -50,7 +52,7 @@ public class ProfileFragement extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = null;
-        if (User.getmAuth().getCurrentUser() != null) {
+        if (User.getUser() != null) {
             //user is not null(logged in)
 
             v = inflater.inflate(R.layout.fragment_profile_user, container, false);
@@ -90,6 +92,7 @@ public class ProfileFragement extends Fragment {
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), LoginActivity.class);
                     startActivity(i);
+
                 }
             });
 
@@ -107,7 +110,5 @@ public class ProfileFragement extends Fragment {
 
         return v;
     }
-
-
-
+    
 }

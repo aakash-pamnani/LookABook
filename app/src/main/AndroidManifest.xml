@@ -12,7 +12,8 @@
         android:theme="@style/Theme.LookABook">
         <activity android:name=".SingleBookActivity"></activity>
         <activity android:name=".FirstScreenActivity" />
-        <activity android:name=".AddBookActivity" /> <!-- Lock in Portrait -->
+        <activity android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustResize"/> <!-- Lock in Portrait -->
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".SignupActivity"

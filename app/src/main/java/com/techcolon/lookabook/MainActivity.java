@@ -2,12 +2,14 @@ package com.techcolon.lookabook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
@@ -50,11 +52,31 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bookListFragment: {
                         toolbar.setTitle("LookABook");
                         toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.booklist_menu);
                         break;
                     }
                     case R.id.profileFragement: {
                         toolbar.setTitle("Profile");
-                        toolbar.inflateMenu(R.menu.profile_fragment_menu);
+                        if(User.getUser()!=null) {
+                            toolbar.getMenu().clear();
+                            toolbar.inflateMenu(R.menu.profile_fragment_menu);
+                            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    if(item.getItemId() == R.id.logout){
+
+                                        User.getmAuth().signOut();
+                                        User.setUser(null);
+                                        User.setmAuth(null);
+                                        navController.navigate(R.id.bookListFragment);
+                                    }
+
+                                    return false;
+                                }
+                            });
+                        }
+                        else
+                            toolbar.getMenu().clear();
                         break;
                     }
                     case R.id.userBookListFragment: {

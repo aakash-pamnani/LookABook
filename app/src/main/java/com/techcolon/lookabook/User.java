@@ -132,6 +132,7 @@ class User {
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
                 email = snapshot.child("Email").getValue(String.class);
+                userBooks.clear();
 
 
                 for (int i = 0; i < noOfBooks; i++) {

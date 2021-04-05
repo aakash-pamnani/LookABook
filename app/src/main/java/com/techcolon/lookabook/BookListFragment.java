@@ -1,5 +1,9 @@
 package com.techcolon.lookabook;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,13 +60,15 @@ public class BookListFragment extends Fragment implements InfiniteScrollListener
         View v = inflater.inflate(R.layout.fragment_book_list, container, false);
         loading = v.findViewById(R.id.loading);
 
+
+        checkNetwork();//will check network, if network available then return here else loop on that method
+        retriveData(null, 10);
         // set the data in recycler view
         rcv = v.findViewById(R.id.recyclerviewbook);
 
         mAdapter = new BookAdapter(getContext());
 
 
-        retriveData(null, 10);
         rcv.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         rcv.setLayoutManager(layoutManager);
@@ -91,6 +98,7 @@ public class BookListFragment extends Fragment implements InfiniteScrollListener
             @Override
             public void run() {
                 mAdapter.addNullData();
+                checkNetwork();
                 retriveData(mAdapter.getLastKey(), 10);
             }
         });
@@ -145,12 +153,45 @@ public class BookListFragment extends Fragment implements InfiniteScrollListener
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.setLoaded();
+                loading.setVisibility(View.INVISIBLE);
 
 
             }
         });
 
 
+    }
+
+    private void checkNetwork() {
+        //checking network state
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+
+        if (!connected) {
+            new AlertDialog.Builder(getContext()).setTitle("Something Went Wrong...")
+                    .setMessage("You are not connected to the internet")
+                    .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            checkNetwork();
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            getActivity().finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } else
+            return;
     }
 
 

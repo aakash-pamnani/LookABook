@@ -42,13 +42,13 @@ public class SingleBookActivity extends AppCompatActivity {
         departmenttv.setText(book.getDepartment());
         semestertv.setText(book.getSemester());
         pricetv.setText(book.getPrice());
-        isbntv.setText(book.getPrice());
+        isbntv.setText(book.getISBN());
         descriptiontv.setText(book.getDescriptionOfBook());
 
         getCurrData(book);
 
 
-        callUser.setText("Contact "+firstName);
+
         callUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +75,7 @@ public class SingleBookActivity extends AppCompatActivity {
                 lastName = snapshot.child("LastName").getValue(String.class);
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 listedbytv.setText(firstName +" "+lastName);
+                callUser.setText("Contact "+firstName);
             }
 
             @Override
