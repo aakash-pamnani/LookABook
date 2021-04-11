@@ -10,10 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LookABook">
-        <activity android:name=".SingleBookActivity"></activity>
+        <activity android:name=".FilterActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".SingleBookActivity" />
         <activity android:name=".FirstScreenActivity" />
-        <activity android:name=".AddBookActivity"
-            android:windowSoftInputMode="adjustResize"/> <!-- Lock in Portrait -->
+        <activity
+            android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustResize" /> <!-- Lock in Portrait -->
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".SignupActivity"

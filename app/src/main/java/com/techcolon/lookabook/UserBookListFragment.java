@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,6 +77,7 @@ public class UserBookListFragment extends Fragment {
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), LoginActivity.class);
                     startActivity(i);
+                    Navigation.findNavController(container).navigate(R.id.bookListFragment);
                 }
             });
 
@@ -86,6 +88,7 @@ public class UserBookListFragment extends Fragment {
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), SignupActivity.class);
                     startActivity(i);
+                    Navigation.findNavController(container).navigate(R.id.bookListFragment);
                 }
             });
         }

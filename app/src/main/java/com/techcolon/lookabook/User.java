@@ -10,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 class User {
@@ -25,13 +24,13 @@ class User {
     private static FirebaseUser user;
     private static ArrayList<Book> userBooks = new ArrayList<>();
     private static StorageReference storageReference;
-    private static URL profilePhotoUrl;
+    private static String profilePhotoUrl;
 
-    public static URL getProfilePhotoUrl() {
+    public static String getProfilePhotoUrl() {
         return profilePhotoUrl;
     }
 
-    public static void setProfilePhotoUrl(URL profilePhotoUrl) {
+    public static void setProfilePhotoUrl(String profilePhotoUrl) {
         User.profilePhotoUrl = profilePhotoUrl;
     }
 
@@ -128,19 +127,21 @@ class User {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 firstName = snapshot.child("FirstName").getValue(String.class);
                 lastName = snapshot.child("LastName").getValue(String.class);
-                profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(URL.class);
+                profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(String.class);
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
                 email = snapshot.child("Email").getValue(String.class);
                 userBooks.clear();
 
 
-                for (int i = 0; i < noOfBooks; i++) {
-                    String bookkey = snapshot.child("Books Added by User").child("Book" + (i + 1)).getValue(String.class);
+                for (DataSnapshot snapshotbooks : snapshot.child("Books Added by User").getChildren()) {
+
+                    String bookkey = snapshotbooks.getValue(String.class);
                     database.getReference().child("Books").child(bookkey).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             userBooks.add(snapshot.getValue(Book.class));
+
                         }
 
                         @Override
@@ -148,9 +149,12 @@ class User {
 
                         }
                     });
+
                 }
 
+
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

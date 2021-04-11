@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,7 +51,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
         if (holder instanceof DataViewHolder) {
             final Book book = bookList.get(position);
             ((DataViewHolder) holder).name.setText(book.getTitleOfBook());
-            ((DataViewHolder) holder).price.setText(book.getPrice());
+            ((DataViewHolder) holder).price.setText(book.getPrice() + "");
             ((DataViewHolder) holder).semester.setText(book.getSemester());
         }
     }

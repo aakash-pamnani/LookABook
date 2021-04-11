@@ -68,7 +68,6 @@ public class BookListFragment extends Fragment implements InfiniteScrollListener
 
         mAdapter = new BookAdapter(getContext());
 
-
         rcv.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         rcv.setLayoutManager(layoutManager);

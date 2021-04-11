@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.concurrent.TimeUnit;
 
@@ -163,8 +162,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "createAccountWithEmail:failure", task.getException());
 
 //                            if(task.getException() instanceof )
-                            logInButton.setEnabled(false);
-
                             Toast.makeText(getApplicationContext(), "Unable To Create Account", Toast.LENGTH_SHORT).show();
 
 

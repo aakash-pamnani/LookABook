@@ -34,7 +34,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.Objects;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 
@@ -505,7 +506,22 @@ public class SignupActivity extends AppCompatActivity {
         User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).putFile(profileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                User.getDatabase().getReference().child("Users").child(User.getUser().getUid()).child("ProfilePhotoUrl").setValue(User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).getDownloadUrl());
+                //  User.getDatabase().getReference().child("Users").child(User.getUser().getUid()).child("ProfilePhotoUrl").setValue(User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).getDownloadUrl());
+
+                User.getStorageReference().child("ProfilePhotos").child(User.getUser().getUid()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        URL url = null;
+                        try {
+                            url = new URL(task.getResult().toString());
+                            Toast.makeText(SignupActivity.this, task.getResult().toString(), Toast.LENGTH_LONG).show();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                        User.getDatabase().getReference().child("Users").child(User.getUser().getUid()).child("ProfilePhotoUrl").setValue(url.toString());
+                        User.setProfilePhotoUrl(url.toString());
+                    }
+                });
 
             }
         }).addOnFailureListener(new OnFailureListener() {

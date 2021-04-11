@@ -5,17 +5,16 @@ import java.io.Serializable;
 class Book implements Serializable {
 
     private String bookID;
-    // private ArrayList<String> imageLinks;
     private String titleOfBook;
     private String isbn;
     private String field;
     private String department;
     private String semester;
-    private String price;
+    private int price;
     private String descriptionOfBook;
     private String userID;
 
-    public Book(String bookID, String userID, String titleOfBook, String isbn, String department, String field, String semester, String price, String descriptionOfBook) {
+    public Book(String bookID, String userID, String titleOfBook, String isbn, String department, String field, String semester, int price, String descriptionOfBook) {
         this.titleOfBook = titleOfBook;
         this.department = department;
         this.semester = semester;
@@ -45,13 +44,7 @@ class Book implements Serializable {
     public void setUserID(String userID) {
         this.userID = userID;
     }
-    // public ArrayList<String> getImageLinks() {
-    //     return imageLinks;
-    // }
 
-    // public void setImageLinks(ArrayList<String> imageLinks) {
-    //     this.imageLinks = imageLinks;
-    // }
 
     public String getTitleOfBook() {
         return titleOfBook;
@@ -69,7 +62,7 @@ class Book implements Serializable {
         return semester;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 

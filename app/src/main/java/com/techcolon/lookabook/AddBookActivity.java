@@ -1,21 +1,33 @@
 package com.techcolon.lookabook;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.firebase.storage.UploadTask;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class AddBookActivity extends AppCompatActivity {
@@ -26,11 +38,16 @@ public class AddBookActivity extends AppCompatActivity {
     String bookTitle;
     String semesterOfBook;
     String isbn;
-    String price;
+    int price;
+    Book currBook;
     String fieldOfBook;
     String departmentOfField;
     String descriptionOfBook;
     ArrayList<String> fieldsArray;
+    ImageView imageView1, imageView2, imageView3, imageView4, imageView0;
+    Uri[] imageuri = new Uri[5];
+    int j;
+    private ProgressDialog progressDialog;
 
     // Resources
     private TextInputLayout bookTitleTextView, descriptionTextView, priceTextView, isbnTextView;
@@ -73,6 +90,49 @@ public class AddBookActivity extends AppCompatActivity {
         priceTextView = findViewById(R.id.pricetextview);
         isbnTextView = findViewById(R.id.isbntextview);
         addBookBtn = findViewById(R.id.addbookbtn);
+        imageView1 = findViewById(R.id.imageview1);
+        imageView2 = findViewById(R.id.imageview2);
+        imageView3 = findViewById(R.id.imageview3);
+        imageView4 = findViewById(R.id.imageview4);
+        imageView0 = findViewById(R.id.imageview0);
+
+
+        imageView0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        imageView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 1);
+            }
+        });
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 2);
+            }
+        });
+        imageView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 3);
+            }
+        });
+        imageView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 4);
+            }
+        });
 
 
 //         make this 3 fields online on database
@@ -92,9 +152,10 @@ public class AddBookActivity extends AppCompatActivity {
         addBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressDialog(true);
                 bookTitle = bookTitleTextView.getEditText().getText().toString();
                 isbn = isbnTextView.getEditText().getText().toString();
-                price = priceTextView.getEditText().getText().toString();
+                price = Integer.parseInt(priceTextView.getEditText().getText().toString().length() == 0 ? "0" : priceTextView.getEditText().getText().toString());
                 descriptionOfBook = descriptionTextView.getEditText().getText().toString();
 
                 semesterOfBook = semesterAutoComplete.getText().toString();
@@ -129,30 +190,30 @@ public class AddBookActivity extends AppCompatActivity {
                 });
 
 
-                if (!checkAllFields(bookTitle, isbn, descriptionOfBook)) {
+                if (!checkAllFields(bookTitle, isbn, descriptionOfBook, imageuri)) {
+                    showProgressDialog(false);
                     return;
                 }
-
 
                 DatabaseReference databaseReference = User.getDatabase().getReference();
 
                 bookId = databaseReference.push().getKey();
                 String userId = User.getmAuth().getCurrentUser().getUid();
-
-                Book currBook = new Book(bookId, userId, bookTitle, isbn, departmentOfField, fieldOfBook, semesterOfBook, price, descriptionOfBook);
+                uploadImages();
+                currBook = new Book(bookId, userId, bookTitle, isbn, departmentOfField, fieldOfBook, semesterOfBook, price, descriptionOfBook);
                 databaseReference.child("Books").child(bookId).setValue(currBook);
 
                 User.addBooks(currBook);
 
                 //adding bookid to user child
-                databaseReference.child("Users").child(userId).child("Books Added by User").child("Book" + (User.getNoOfBooks() + 1)).setValue(bookId);
+                databaseReference.child("Users").child(userId).child("Books Added by User").child(bookId).setValue(bookId);
                 User.setNoOfBooks(User.getNoOfBooks() + 1);
                 databaseReference.child("Users").child(userId).child("noOfBooks").setValue(User.getNoOfBooks());
 
 
                 Toast.makeText(AddBookActivity.this, "Book Added Successfully", Toast.LENGTH_SHORT).show();
-                finish();
-                
+
+
             }
 
 
@@ -162,11 +223,18 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkAllFields(String bookTitle, String isbn, String descriptionOfBook) {
+    private boolean checkAllFields(String bookTitle, String isbn, String descriptionOfBook, Uri[] imageuri) {
 
         bookTitleTextView.setError(null);
         isbnTextView.setError(null);
         descriptionTextView.setError(null);
+
+
+        //check for at least on image
+//        if(!checkAtLeastOneImage(imageuri)){
+//            Toast.makeText(this, "Select At least One Image", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
 
         if (!checkString(bookTitle)) {
@@ -196,6 +264,16 @@ public class AddBookActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean checkAtLeastOneImage(Uri[] imageuri) {
+
+        if (imageuri[0] == null && imageuri[1] == null && imageuri[2] == null && imageuri[3] == null && imageuri[4] == null) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
     private boolean checkIsbn(String isbn) {
         if (isbn.length() == 0 || isbn.length() == 10 || isbn.length() == 13) {
             return true;
@@ -216,5 +294,97 @@ public class AddBookActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                imageuri[0] = data.getData();
+                imageView0.setImageURI(imageuri[0]);
+            }
+        } else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                imageuri[1] = data.getData();
+                imageView1.setImageURI(imageuri[1]);
+            }
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                imageuri[2] = data.getData();
+                imageView2.setImageURI(imageuri[2]);
+            }
+        } else if (requestCode == 3) {
+            if (resultCode == RESULT_OK) {
+                imageuri[3] = data.getData();
+                imageView3.setImageURI(imageuri[3]);
+            }
+        } else {
+            if (resultCode == RESULT_OK) {
+                imageuri[4] = data.getData();
+                imageView4.setImageURI(imageuri[4]);
+            }
+        }
+    }
+
+    private void uploadImages() {
+
+        for (int i = 0; i < 5; i++) {
+            j = i;
+            if (imageuri[i] == null)
+                continue;
+
+            else {
+                String randomKey = User.getDatabase().getReference().child("Books").child(bookId).child("Images").push().getKey();
+                User.getStorageReference().child("Books").child(bookId).child(randomKey).putFile(imageuri[i]).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+
+                        User.getStorageReference().child("Books").child(bookId).child(randomKey).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+
+                                URL imageUrl = null;
+                                try {
+                                    imageUrl = new URL(task.getResult().toString());
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
+                                User.getDatabase().getReference().child("Books").child(bookId).child("Images").child(randomKey).setValue(imageUrl.toString());
+
+                            }
+                        });
+
+
+                        if (j == 4) {
+                            showProgressDialog(false);
+                            finish();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Some error occurred while uploading Images", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+
+
+    }
+
+    private void showProgressDialog(Boolean show) {
+        if (show) {
+            progressDialog = new ProgressDialog(AddBookActivity.this);
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
+
+        } else {
+            progressDialog.cancel();
+        }
     }
 }

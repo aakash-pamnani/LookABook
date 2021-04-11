@@ -9,14 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class ProfileFragement extends Fragment {
@@ -28,6 +29,7 @@ public class ProfileFragement extends Fragment {
     TextView noOfBooks;
     TextView phoneNumber;
     ShapeableImageView profilepic;
+    Bitmap bitmap;
     private Button signupBtn;
     private TextView loginBtn;
     public ProfileFragement() {
@@ -51,6 +53,7 @@ public class ProfileFragement extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View v = null;
         if (User.getUser() != null) {
             //user is not null(logged in)
@@ -73,13 +76,16 @@ public class ProfileFragement extends Fragment {
             noOfBooks.setText(User.getNoOfBooks() + "");
             if (User.getProfilePhotoUrl() != null) {
 
-                Bitmap bmp = null;
+
+                URL imageurl = null;
                 try {
-                    bmp = BitmapFactory.decodeStream(User.getProfilePhotoUrl().openConnection().getInputStream());
-                } catch (IOException e) {
+                    imageurl = new URL(User.getProfilePhotoUrl());
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                profilepic.setImageBitmap(bmp);
+                getBitmap(imageurl);
+
+
             }
 
 
@@ -92,7 +98,7 @@ public class ProfileFragement extends Fragment {
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), LoginActivity.class);
                     startActivity(i);
-
+                    Navigation.findNavController(container).navigate(R.id.bookListFragment);
                 }
             });
 
@@ -103,6 +109,7 @@ public class ProfileFragement extends Fragment {
                 public void onClick(View v) {
                     Intent i = new Intent(getContext(), SignupActivity.class);
                     startActivity(i);
+                    Navigation.findNavController(container).navigate(R.id.bookListFragment);
                 }
             });
         }
@@ -110,5 +117,35 @@ public class ProfileFragement extends Fragment {
 
         return v;
     }
-    
+
+    private void getBitmap(URL imageurl) {
+
+        Thread getImageThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                URL url = imageurl;
+                try {
+                    url = new URL(User.getProfilePhotoUrl());
+                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        profilepic.setImageBitmap(bitmap);
+                    }
+                });
+
+            }
+
+
+        });
+        getImageThread.start();
+
+    }
 }

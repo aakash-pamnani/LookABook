@@ -53,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
                         toolbar.setTitle("LookABook");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.booklist_menu);
+                        toolbar.getMenu().findItem(R.id.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+                                startActivity(i);
+                                return false;
+                            }
+                        });
                         break;
                     }
                     case R.id.profileFragement: {
@@ -67,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
                                         User.getmAuth().signOut();
                                         User.setUser(null);
-                                        User.setmAuth(null);
                                         navController.navigate(R.id.bookListFragment);
                                     }
 
