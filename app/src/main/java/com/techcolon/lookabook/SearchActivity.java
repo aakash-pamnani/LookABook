@@ -1,8 +1,14 @@
 package com.techcolon.lookabook;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,20 +26,25 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
 
     SearchView search;
     RecyclerView rcv;
-    //    LinearLayout loading;
     private BookAdapter mAdapter;
     private InfiniteScrollListener listener;
+    ArrayList<Book> books, booksSearch;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         search = findViewById(R.id.search_view);
         rcv = findViewById(R.id.recyclerview);
         mAdapter = new BookAdapter(this);
 
+        checkNetwork();
+        showProgressDialog(true);
         retriveData(null, 10);
+        search.requestFocus();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcv.setLayoutManager(layoutManager);
         listener = new InfiniteScrollListener(layoutManager, this);
@@ -46,6 +57,19 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
         rcv.setAdapter(mAdapter);
         rcv.addOnScrollListener(listener);
 
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search(newText);
+                return true;
+            }
+        });
+
 
     }
 
@@ -55,24 +79,15 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
 
         Query query;
 
-        if (bookId == null) {
-//            loading.setVisibility(View.VISIBLE);
-            query = User.getDatabase().getReference()
-                    .child("Books");
-        } else {
 
             query = User.getDatabase().getReference()
-                    .child("Books")
-                    .orderByKey()
-                    .startAt(bookId)
-                    .limitToFirst(size);
-        }
+                    .child("Books");
 
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Book> books = new ArrayList<>();
+                books = new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Book book = snapshot.getValue(Book.class);
@@ -82,20 +97,15 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
                     } else
                         books.add(book);
                 }
-                if (bookId != null) //retriveing data more than 1st time
-                    mAdapter.removeNull();
+                showProgressDialog(false);
+                search(null);
 
-
-                mAdapter.addData(books);
-                listener.setLoaded();
-                // loading.setVisibility(View.INVISIBLE);
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 listener.setLoaded();
-                // loading.setVisibility(View.INVISIBLE);
 
 
             }
@@ -108,4 +118,68 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
     public void onLoadMore() {
 
     }
+
+    public void search(String text) {
+        booksSearch = new ArrayList<>();
+        if (text == null) {
+            booksSearch.addAll(books);
+        } else {
+            for (Book item : books) {
+                if (item.getTitleOfBook().toLowerCase().contains(text.toLowerCase())
+                        || item.getDepartment().toLowerCase().contains(text.toLowerCase())
+                        || item.getField().toLowerCase().contains(text.toLowerCase())) {
+                    booksSearch.add(item);
+                }
+            }
+        }
+        mAdapter.addNewData(booksSearch);
+        listener.setLoaded();
+
+
+    }
+
+    private void showProgressDialog(Boolean show) {
+        if (show) {
+            progressDialog = new ProgressDialog(SearchActivity.this);
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
+
+        } else {
+            progressDialog.cancel();
+        }
+    }
+
+    private void checkNetwork() {
+        //checking network state
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+
+        if (!connected) {
+            new AlertDialog.Builder(this).setTitle("Something Went Wrong...")
+                    .setMessage("You are not connected to the internet")
+                    .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            checkNetwork();
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } else
+            return;
+    }
+
 }

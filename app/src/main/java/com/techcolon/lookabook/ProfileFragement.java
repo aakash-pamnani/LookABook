@@ -2,7 +2,6 @@ package com.techcolon.lookabook;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -118,34 +117,9 @@ public class ProfileFragement extends Fragment {
         return v;
     }
 
-    private void getBitmap(URL imageurl) {
+    private void getBitmap(URL imageUrl) {
 
-        Thread getImageThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                URL url = imageurl;
-                try {
-                    url = new URL(User.getProfilePhotoUrl());
-                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        profilepic.setImageBitmap(bitmap);
-                    }
-                });
-
-            }
-
-
-        });
-        getImageThread.start();
+        Glide.with(getActivity()).load(imageUrl).into(profilepic);
 
     }
 }

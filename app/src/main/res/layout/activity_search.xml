@@ -15,11 +15,10 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
-            style="@style/Widget.AppCompat.SearchView.ActionBar"
+            style="@style/LookABook.Search_View"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/background"
             app:goIcon="@drawable/ic_book"
             app:iconifiedByDefault="false"
             app:queryHint="Search Books..." />

@@ -3,7 +3,6 @@ package com.techcolon.lookabook;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -15,14 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class SingleBookActivity extends AppCompatActivity {
     private TextView titleTv, fieldtv, departmenttv, semestertv, pricetv, isbntv, descriptiontv, listedbytv;
@@ -98,29 +95,8 @@ public class SingleBookActivity extends AppCompatActivity {
 
                     for (DataSnapshot snapshotimages : snapshot.getChildren()) {
                         String imageUrl = snapshotimages.getValue(String.class);
-                        Thread getImage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                try {
-                                    URL url = new URL(imageUrl);
-                                    imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        images[imagescount].setImageBitmap(imageBitmap);
-                                        imagescount++;
-
-                                    }
-                                });
-
-                            }
-
-                        });
-                        getImage.start();
+                        Glide.with(getApplicationContext()).load(imageUrl).into(images[imagescount]);
+                        imagescount++;
 
 
                     }

@@ -87,6 +87,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
         notifyDataSetChanged();
     }
 
+    public void addNewData(ArrayList<Book> newData) {
+        bookList.clear();
+        bookList.addAll(newData);
+        notifyDataSetChanged();
+    }
+
     public String getLastKey() {
         if (bookList.get(getItemCount() - 1) != null)
             return bookList.get(getItemCount() - 1).getBookID();

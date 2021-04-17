@@ -43,6 +43,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
     String email, firstName, lastName, phone;
+    int noOfBooks = 0;
     private EditText otp1, otp2, otp3, otp4, otp5, otp6;
     private Button signUpBtn;
     private TextInputLayout phoneLayout;
@@ -361,7 +362,7 @@ public class SignupActivity extends AppCompatActivity {
                             User.setPhoneNumber(phone);
                             User.setFirstName(firstName);
                             User.setLastName(lastName);
-                            User.setNoOfBooks(0);
+                            User.setNoOfBooks(noOfBooks);
                             User.setProfilePhotoUrl(null);
 
                             myRef.child(userID);
