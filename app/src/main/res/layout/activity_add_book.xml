@@ -85,10 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:hint="BookTitle"
-                app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -103,11 +100,9 @@
 
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
+                android:id="@+id/fieldlayout"
                 android:layout_height="wrap_content"
-                android:hint="Select Your Field"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/booktitle">
+                android:hint="Select Your Field">
 
                 <AutoCompleteTextView
                     android:id="@+id/fieldautocomplete"
@@ -123,6 +118,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/departmentlayout"
                 android:hint="Select Your Department">
 
                 <AutoCompleteTextView
@@ -138,6 +134,7 @@
 
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
+                android:id="@+id/semseterlayout"
                 android:layout_height="wrap_content"
                 android:hint="Select Your Semester">
 

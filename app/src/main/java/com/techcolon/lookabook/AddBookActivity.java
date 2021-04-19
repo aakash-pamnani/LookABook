@@ -50,7 +50,7 @@ public class AddBookActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     // Resources
-    private TextInputLayout bookTitleTextView, descriptionTextView, priceTextView, isbnTextView;
+    private TextInputLayout bookTitleTextView, descriptionTextView, priceTextView, isbnTextView, departmentLayout, fieldLayout, semseterLayout;
     private AutoCompleteTextView departmentAutoComplete, fieldAutoComplete, semesterAutoComplete;
     private Button addBookBtn;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
@@ -85,6 +85,9 @@ public class AddBookActivity extends AppCompatActivity {
         fieldAutoComplete = findViewById(R.id.fieldautocomplete);
         departmentAutoComplete = findViewById(R.id.departmentautocomplete);
         semesterAutoComplete = findViewById(R.id.semesterautocomplete);
+        fieldLayout = findViewById(R.id.fieldlayout);
+        departmentLayout = findViewById(R.id.departmentlayout);
+        semseterLayout = findViewById(R.id.semseterlayout);
         bookTitleTextView = findViewById(R.id.booktitle);
         descriptionTextView = findViewById(R.id.descriptiontextview);
         priceTextView = findViewById(R.id.pricetextview);
@@ -158,9 +161,9 @@ public class AddBookActivity extends AppCompatActivity {
                 price = Integer.parseInt(priceTextView.getEditText().getText().toString().length() == 0 ? "0" : priceTextView.getEditText().getText().toString());
                 descriptionOfBook = descriptionTextView.getEditText().getText().toString();
 
-                semesterOfBook = semesterAutoComplete.getText().toString();
-                departmentOfField = departmentAutoComplete.getText().toString();
-                fieldOfBook = fieldAutoComplete.getText().toString();
+//                semesterOfBook = semesterAutoComplete.getText().toString();
+//                departmentOfField = departmentAutoComplete.getText().toString();
+//                fieldOfBook = fieldAutoComplete.getText().toString();
 
 
                 fieldAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -190,7 +193,7 @@ public class AddBookActivity extends AppCompatActivity {
                 });
 
 
-                if (!checkAllFields(bookTitle, isbn, descriptionOfBook, imageuri)) {
+                if (!checkAllFields(bookTitle, isbn, descriptionOfBook, fieldOfBook, departmentOfField, semesterOfBook, imageuri)) {
                     showProgressDialog(false);
                     return;
                 }
@@ -210,7 +213,7 @@ public class AddBookActivity extends AppCompatActivity {
                 User.setNoOfBooks(User.getNoOfBooks() + 1);
                 databaseReference.child("Users").child(userId).child("noOfBooks").setValue(User.getNoOfBooks());
 
-
+                showProgressDialog(false);
                 Toast.makeText(AddBookActivity.this, "Book Added Successfully", Toast.LENGTH_SHORT).show();
 
 
@@ -223,14 +226,17 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkAllFields(String bookTitle, String isbn, String descriptionOfBook, Uri[] imageuri) {
+    private boolean checkAllFields(String bookTitle, String isbn, String descriptionOfBook, String fieldOfBook, String departmentOfField, String semesterOfBook, Uri[] imageuri) {
 
         bookTitleTextView.setError(null);
         isbnTextView.setError(null);
         descriptionTextView.setError(null);
+        fieldLayout.setError(null);
+        departmentLayout.setError(null);
+        semseterLayout.setError(null);
 
 
-        //check for at least on image
+        //check for at least one image
 //        if(!checkAtLeastOneImage(imageuri)){
 //            Toast.makeText(this, "Select At least One Image", Toast.LENGTH_SHORT).show();
 //            return false;
@@ -243,6 +249,28 @@ public class AddBookActivity extends AppCompatActivity {
         } else {
             bookTitleTextView.setError(null);
 
+        }
+
+        if (fieldOfBook == null) {
+            fieldLayout.setError("This field cannot be empty");
+
+            return false;
+        } else {
+            fieldLayout.setError(null);
+        }
+
+        if (departmentOfField == null) {
+            departmentLayout.setError("This field cannot be empty");
+            return false;
+        } else {
+            departmentLayout.setError(null);
+        }
+
+        if (semesterOfBook == null) {
+            semseterLayout.setError("This field cannot be empty");
+            return false;
+        } else {
+            semseterLayout.setError(null);
         }
 
         if (!checkIsbn(isbn)) {
@@ -260,6 +288,7 @@ public class AddBookActivity extends AppCompatActivity {
         } else {
             descriptionTextView.setError(null);
         }
+
 
         return true;
     }
