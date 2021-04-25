@@ -1,8 +1,12 @@
 package com.techcolon.lookabook;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +40,9 @@ public class SingleBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_book);
+
+        checkNetwork();
+
         Intent i = getIntent();
         Book book = (Book) i.getSerializableExtra("SingleBook");
         showProgressDialog(true);
@@ -64,7 +72,7 @@ public class SingleBookActivity extends AppCompatActivity {
 
         getCurrData(book);
         getImages(book);
-        showProgressDialog(false);
+
 
 
         callUser.setOnClickListener(new View.OnClickListener() {
@@ -123,10 +131,12 @@ public class SingleBookActivity extends AppCompatActivity {
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
                 listedbytv.setText(firstName + " " + lastName);
                 callUser.setText("Contact " + firstName);
+                showProgressDialog(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                showProgressDialog(false);
                 Toast.makeText(getApplicationContext(), "There was some error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -142,5 +152,37 @@ public class SingleBookActivity extends AppCompatActivity {
         } else {
             progressDialog.cancel();
         }
+    }
+
+    private void checkNetwork() {
+        //checking network state
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) SingleBookActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+
+        if (!connected) {
+            new AlertDialog.Builder(SingleBookActivity.this).setTitle("Something Went Wrong...")
+                    .setMessage("You are not connected to the internet")
+                    .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            checkNetwork();
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } else
+            return;
     }
 }

@@ -22,7 +22,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.storage.UploadTask;
 
@@ -49,6 +52,7 @@ public class AddBookActivity extends AppCompatActivity {
     int j;
     private ProgressDialog progressDialog;
 
+
     // Resources
     private TextInputLayout bookTitleTextView, descriptionTextView, priceTextView, isbnTextView, departmentLayout, fieldLayout, semseterLayout;
     private AutoCompleteTextView departmentAutoComplete, fieldAutoComplete, semesterAutoComplete;
@@ -61,25 +65,7 @@ public class AddBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_book);
         fieldsArray = new ArrayList<>();
 
-//         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-//         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-//                 .setMinimumFetchIntervalInSeconds(3600)
-//                 .build();
-//         mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
-//
-//
-//         String fieldsString = mFirebaseRemoteConfig.getString("fieldss");
-// //        try {
-// //            JSONArray fieldsJson = new JSONObject(fieldsString).getJSONArray("fields");
-// //            Log.d("JSONPRINT", fieldsString.toString());
-// //            String[] arr = fieldsJson.toString().replace("},{", " ,").split(" ");
-//            for(int i = 0 ; i < fieldsJson.length() ;i++) {
-//                fieldsArray.add(fieldsArray.get(i).toString());
-//            }
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+
 
 
         fieldAutoComplete = findViewById(R.id.fieldautocomplete);
@@ -139,9 +125,31 @@ public class AddBookActivity extends AppCompatActivity {
 
 
 //         make this 3 fields online on database
-        String[] fields = {"Engineering"};
-        String[] dept = {"Computer", "Mechanical", "Electrical"};
+        ArrayList<String> fields = new ArrayList<>();
+        ArrayList<String> dept = new ArrayList<>();
         String[] sem = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+
+        departmentLayout.setEnabled(false);
+
+        showProgressDialog(true);
+        User.getDatabase().getReference().child("Fields").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshotFields : snapshot.getChildren()) {
+
+                    String field = snapshotFields.getKey();
+                    fields.add(field);
+
+                }
+                showProgressDialog(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         ArrayAdapter arrayAdapterFields = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, fields);
         ArrayAdapter arrayAdapterDepts = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dept);
@@ -151,6 +159,54 @@ public class AddBookActivity extends AppCompatActivity {
         departmentAutoComplete.setAdapter(arrayAdapterDepts);
         semesterAutoComplete.setAdapter(arrayAdapterSem);
 
+
+        fieldAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                fieldOfBook = adapterView.getItemAtPosition(i).toString();
+
+                showProgressDialog(true);
+                User.getDatabase().getReference().child("Fields").child(fieldOfBook).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot snapshotFields : snapshot.getChildren()) {
+
+                            String field = snapshotFields.getValue(String.class);
+                            dept.add(field);
+
+                        }
+                        showProgressDialog(false);
+                        departmentLayout.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+            }
+        });
+
+        departmentAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                departmentOfField = adapterView.getItemAtPosition(i).toString();
+            }
+        });
+
+        semesterAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                semesterOfBook = adapterView.getItemAtPosition(i).toString();
+            }
+
+        });
 
         addBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,33 +220,6 @@ public class AddBookActivity extends AppCompatActivity {
 //                semesterOfBook = semesterAutoComplete.getText().toString();
 //                departmentOfField = departmentAutoComplete.getText().toString();
 //                fieldOfBook = fieldAutoComplete.getText().toString();
-
-
-                fieldAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        fieldOfBook = adapterView.getItemAtPosition(i).toString();
-                    }
-                });
-
-                departmentAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        departmentOfField = adapterView.getItemAtPosition(i).toString();
-                    }
-                });
-
-                semesterAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        semesterOfBook = adapterView.getItemAtPosition(i).toString();
-                    }
-
-                });
 
 
                 if (!checkAllFields(bookTitle, isbn, descriptionOfBook, fieldOfBook, departmentOfField, semesterOfBook, imageuri)) {
@@ -215,7 +244,7 @@ public class AddBookActivity extends AppCompatActivity {
 
                 showProgressDialog(false);
                 Toast.makeText(AddBookActivity.this, "Book Added Successfully", Toast.LENGTH_SHORT).show();
-
+                finish();
 
             }
 

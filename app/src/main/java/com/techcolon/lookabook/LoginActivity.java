@@ -21,6 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     String phone,otp;
     private String verification;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         User.setPhoneNumber(phone);
+
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + phone, 10, TimeUnit.SECONDS, this,
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -151,36 +156,30 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             User.setUser(user);
 
-                            Toast.makeText(getApplicationContext(), "Signup Successfull", Toast.LENGTH_SHORT).show();
-                            updateUi(user);
-                            User.getUserData();
+                            isUserCreated();
+
+
                         } else {
                             // If sign in fails, display a message to the user.
+                            showProgressDialog(false);
                             Log.w(TAG, "createAccountWithEmail:failure", task.getException());
 
 //                            if(task.getException() instanceof )
-                            Toast.makeText(getApplicationContext(), "Unable To Create Account", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Unable To Login", Toast.LENGTH_SHORT).show();
+                            logInButton.setEnabled(false);
 
 
                         }
-                        showProgressDialog(false);
+                        //  showProgressDialog(false);
                     }
 
 
-                    private void updateUi(FirebaseUser user) {
-                        if (user != null) {
-                            //if user is not empty
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("LoggedIn", true);
-                            setResult(RESULT_OK, resultIntent);
-                            finish();
-                        } else {
-                            //if user is empty
-                        }
-                    }
+                    // private void updateUi(FirebaseUser user) {
+
+                    // }
 
                 });
 
@@ -218,15 +217,56 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void showProgressDialog(Boolean show){
-        if(show) {
+        if (show) {
             progressDialog = new ProgressDialog(LoginActivity.this);
             progressDialog.setTitle("Loading...");
             progressDialog.show();
             progressDialog.setCanceledOnTouchOutside(false);
 
-        }
-        else{
+        } else {
             progressDialog.cancel();
         }
+    }
+
+    public void isUserCreated() {
+
+        User.getDatabase().getReference().child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (!snapshot.hasChild(mAuth.getUid())) {
+                    // showProgressDialog(false);
+                    Toast.makeText(LoginActivity.this, "Signup First!", Toast.LENGTH_SHORT).show();
+                    // isUserCreated = false ;
+                    mAuth.getCurrentUser().delete();
+                    mAuth.signOut();
+                    logInButton.setEnabled(false);
+
+                } else {
+                    // isUserCreated=true;
+
+                    Toast.makeText(getApplicationContext(), "Signin Successfull", Toast.LENGTH_SHORT).show();
+                    // updateUi(user);
+                    User.getUserData();
+                    if (user != null) {
+                        //if user is not empty
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("LoggedIn", true);
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    } else {
+                        //if user is empty
+                    }
+                }
+                showProgressDialog(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        // return isUserCreated;
     }
 }

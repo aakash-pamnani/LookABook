@@ -117,7 +117,6 @@ class User {
     }
 
 
-
     public static void getUserData() { //will be called when user loggedin
 
 
@@ -129,7 +128,7 @@ class User {
                 lastName = snapshot.child("LastName").getValue(String.class);
                 profilePhotoUrl = snapshot.child("ProfilePhotoUrl").getValue(String.class);
                 phoneNumber = snapshot.child("PhoneNumber").getValue(String.class);
-                noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class);
+                noOfBooks = snapshot.child("noOfBooks").getValue(Integer.class) == null ? 0 : snapshot.child("noOfBooks").getValue(Integer.class);
                 email = snapshot.child("Email").getValue(String.class);
                 userBooks.clear();
 
