@@ -168,6 +168,7 @@ public class AddBookActivity extends AppCompatActivity {
                 fieldOfBook = adapterView.getItemAtPosition(i).toString();
 
                 showProgressDialog(true);
+                dept.clear();
                 User.getDatabase().getReference().child("Fields").child(fieldOfBook).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
