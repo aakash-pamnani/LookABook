@@ -12,10 +12,44 @@
         android:orientation="vertical">
 
 
-    <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_brightness"
+                android:drawablePadding="15dp"
+                android:text="Theme"
+                android:textColor="@color/black"
+                android:textSize="24dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:id="@+id/theme"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/themeautocomplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:inputType="none"
+                    android:text="System Default" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

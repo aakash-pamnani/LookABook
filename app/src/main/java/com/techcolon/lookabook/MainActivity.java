@@ -1,7 +1,11 @@
 package com.techcolon.lookabook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -29,6 +33,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences("LookABook_Storage", Context.MODE_PRIVATE);
+        int theme = prefs.getInt("Theme", 0);
+
+
+        Log.d("THEME_value", theme + "");
+        if (theme == 1) {
+            setTheme(R.style.ThemeLight_LookABook);
+        } else if (theme == 2) {
+            setTheme(R.style.ThemeDark_LookABook);
+        } else {
+            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    setTheme(R.style.ThemeDark_LookABook);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    setTheme(R.style.ThemeLight_LookABook);
+                    break;
+            }
+        }
+
+
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.topAppBar);
@@ -71,10 +97,15 @@ public class MainActivity extends AppCompatActivity {
                             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
-                                    if(item.getItemId() == R.id.logout){
+                                    if (item.getItemId() == R.id.logout) {
 
                                         User.getmAuth().signOut();
                                         User.setUser(null);
+                                        navController.navigate(R.id.bookListFragment);
+                                    } else if (item.getItemId() == R.id.editprofile) {
+
+                                        Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+                                        startActivity(i);
                                         navController.navigate(R.id.bookListFragment);
                                     }
 

@@ -2,21 +2,22 @@ package com.techcolon.lookabook;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -26,18 +27,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -55,7 +50,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_edit_profile);
 
 
         firstnameLayout = findViewById(R.id.firstname);
@@ -65,12 +60,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Setting the current User's details in the respective TextFields;
 
-
         firstnameLayout.getEditText().setText(User.getFirstName());
         lastnameLayout.getEditText().setText(User.getLastName());
         emailLayout.getEditText().setText(User.getEmail());
 
-        if(User.getProfilePhotoUrl().length()>0){
+        if (User.getProfilePhotoUrl() != null) {
             Glide.with(this).load(User.getProfilePhotoUrl()).into(profilePic);
         }
 
@@ -87,44 +81,47 @@ public class EditProfileActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!createAccount(firstName, lastName, email)) {
-                    return;
-                }
-                else{
-                    onSignUpButton();
-                }
+
+
+                showProgressDialog(true);
+                onSignUpButton();
+
             }
         });
 
     }
 
     private void onSignUpButton() {
+
+        checkNetwork();
+
+
         mAuth = User.getmAuth();
 
         firstName = firstnameLayout.getEditText().getText().toString();
         lastName = lastnameLayout.getEditText().getText().toString();
         email = emailLayout.getEditText().getText().toString();
 
+        if (!createAccount(firstName, lastName, email)) {
+            showProgressDialog(false);
+            return;
+        }
+
         DatabaseReference myRef = User.getDatabase().getReference().child("Users").child(User.getmAuth().getCurrentUser().getUid());
 
-        User.setEmail(email);
-        User.setFirstName(firstName);
-        User.setLastName(lastName);
-        User.setProfilePhotoUrl(null);
+
         myRef.child("FirstName").setValue(firstName);
         myRef.child("LastName").setValue(lastName);
         myRef.child("Email").setValue(email);
-        myRef.child("ProfilePhotoUrl").setValue(null);
+
+        User.getUserData();
 
         if (profileUri != null)
             uploadProfilePic(profileUri);
 
         Toast.makeText(getApplicationContext(), "Edits Saved", Toast.LENGTH_SHORT).show();
-
+        showProgressDialog(false);
         finish();
-
-
-
 
 
     }
@@ -242,4 +239,54 @@ public class EditProfileActivity extends AppCompatActivity {
             progressDialog.cancel();
         }
     }
+
+    private void checkNetwork() {
+        //checking network state
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else
+            connected = false;
+
+        if (!connected) {
+            new AlertDialog.Builder(getApplicationContext()).setTitle("Something Went Wrong...")
+                    .setMessage("You are not connected to the internet")
+                    .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            checkNetwork();
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        } else
+            return;
+    }
+
+
+    //code to edit phone number
+//    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential( "+91-98298XXXX2", "OTP_CODE" );
+//    // Update Mobile Number...
+//    firebaseAuth.getCurrentUser().updatePhoneNumber(phoneAuthCredential)
+//        .addOnCompleteListener(new OnCompleteListener <Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task <Void> task) {
+//                if (task.isSuccessful()) {
+//                    // Update Successfully
+//                } else {
+//                    // Failed
+//                }
+//            }
+//        }
+//    );
+
 }

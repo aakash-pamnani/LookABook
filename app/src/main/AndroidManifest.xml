@@ -9,8 +9,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LookABook">
-        <activity android:name=".editProfileActivity"></activity>
+        android:theme="@style/ThemeLight_LookABook">
+        <activity android:name=".EditProfileActivity"></activity>
         <activity android:name=".FilterActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".SingleBookActivity" />
