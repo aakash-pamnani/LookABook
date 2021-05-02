@@ -66,7 +66,7 @@ public class BookListFragment extends Fragment implements InfiniteScrollListener
         // set the data in recycler view
         rcv = v.findViewById(R.id.recyclerviewbook);
 
-        mAdapter = new BookAdapter(getContext());
+        mAdapter = new BookAdapter(getContext(), 0);
 
         rcv.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());

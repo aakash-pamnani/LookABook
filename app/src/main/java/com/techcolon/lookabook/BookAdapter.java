@@ -17,12 +17,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
 
     private ArrayList<Book> bookList = new ArrayList<>();
     private Context isContext = null;
+    private int fragment = 0; //0 for book list fragment,search fragment and  1 for user book list fragment
 
     //
-    public BookAdapter(Context isContext) {
+    public BookAdapter(Context isContext, int CalledByWhichFragment) {
         this.isContext = isContext;
+        this.fragment = CalledByWhichFragment;
     }
-    public BookAdapter(){
+
+    public BookAdapter() {
     }
 
 
@@ -121,12 +124,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isContext!=null){
+                    if(isContext!=null) {
                         Intent intent = new Intent(isContext, SingleBookActivity.class);
-                        intent.putExtra("SingleBook",bookList.get(getLayoutPosition()));
+                        intent.putExtra("SingleBook", bookList.get(getLayoutPosition()));
+
+                        if (fragment == 1) {//user book list fragment
+                            intent.putExtra("isUserBook", true);
+                        }
                         isContext.startActivity(intent);
                     }
-//                    Toast.makeText(itemView.getContext(), "You clicked " + bookList.get(getLayoutPosition()).getTitleOfBook(), Toast.LENGTH_SHORT).show();
+
 
                 }
             });

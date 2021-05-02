@@ -1,5 +1,11 @@
 package com.techcolon.lookabook;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.Serializable;
 
 class Book implements Serializable {
@@ -84,6 +90,43 @@ class Book implements Serializable {
 
     public String getDescriptionOfBook() {
         return descriptionOfBook;
+    }
+
+
+    public static boolean deleteBook(Book bookToDelete) {
+
+        //remove from user child
+        User.getDatabase().getReference().child("Users").child(User.getmAuth().getUid()).child("Books Added by User").child(bookToDelete.getBookID()).removeValue().isSuccessful();
+
+        //remove from books child
+        User.getDatabase().getReference().child("Books").child(bookToDelete.getBookID()).removeValue().isSuccessful();
+
+        //decrement no of books counter
+        User.getDatabase().getReference().child("Users").child(User.getmAuth().getUid()).child("noOfBooks").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int currentCountOfBooks = snapshot.getValue(Integer.class);
+                User.getDatabase().getReference().child("Users").child(User.getmAuth().getUid()).child("noOfBooks").setValue(currentCountOfBooks - 1);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //update new data at local objects
+        User.setNoOfBooks(User.getNoOfBooks() - 1);
+
+
+        for (int i = 0; i < User.getUserBooks().size(); i++) {
+            if (User.getUserBooks().get(i).getBookID().equals(bookToDelete.getBookID())) {
+                User.getUserBooks().remove(i);
+                break;
+            }
+        }
+
+        return true;
+
     }
 
 

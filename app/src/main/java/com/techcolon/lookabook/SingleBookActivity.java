@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +46,37 @@ public class SingleBookActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         Book book = (Book) i.getSerializableExtra("SingleBook");
+        Boolean isUserBook = i.getBooleanExtra("isUserBook", false);
+        toolbar = findViewById(R.id.topAppBar);
+        toolbar.setTitle(book.getTitleOfBook());
+
+        if (isUserBook) {
+            toolbar.inflateMenu(R.menu.singlebooklist_menu);
+
+            toolbar.getMenu().findItem(R.id.editbook).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+
+                    return false;
+                }
+            });
+
+            toolbar.getMenu().findItem(R.id.deletebook).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    if (Book.deleteBook(book)) {
+                        Toast.makeText(SingleBookActivity.this, "Book Deleted Succesfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SingleBookActivity.this, "Unable to delete book", Toast.LENGTH_SHORT).show();
+
+                    }
+                    finish();
+                    return false;
+                }
+            });
+        } else {
+            toolbar.getMenu().clear();
+        }
         showProgressDialog(true);
         images[0] = findViewById(R.id.imageview0);
         images[1] = findViewById(R.id.imageview1);
@@ -72,7 +104,6 @@ public class SingleBookActivity extends AppCompatActivity {
 
         getCurrData(book);
         getImages(book);
-
 
 
         callUser.setOnClickListener(new View.OnClickListener() {

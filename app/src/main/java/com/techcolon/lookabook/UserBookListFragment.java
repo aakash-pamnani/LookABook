@@ -40,6 +40,22 @@ public class UserBookListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (User.getNoOfBooks() != 0) {
+            mAdapter.addNewData(User.getUserBooks());
+            mAdapter.notifyDataSetChanged();
+            noBooks.setVisibility(View.GONE);
+            rcvId.setVisibility(View.VISIBLE);
+        } else {
+            rcvId.setVisibility(View.GONE);
+            noBooks.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = null;
@@ -48,24 +64,23 @@ public class UserBookListFragment extends Fragment {
             v = inflater.inflate(R.layout.fragment_user_book_list, container, false);
             rcvId = v.findViewById(R.id.rcvid);
             noBooks = v.findViewById(R.id.nobooks);
-            if(User.getUserBooks().size()==0){
+            rcv = v.findViewById(R.id.recyclerviewbook);
+
+            mAdapter = new BookAdapter(getContext(), 1);
+            rcv.setAdapter(mAdapter);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+            rcv.setLayoutManager(layoutManager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rcv.getContext(),
+                    layoutManager.getOrientation());
+            rcv.addItemDecoration(dividerItemDecoration);
+
+
+            if (User.getUserBooks().size() == 0) {
                 rcvId.setVisibility(View.GONE);
-            }
-            else{
+            } else {
                 noBooks.setVisibility(View.GONE);
-
-                rcv = v.findViewById(R.id.recyclerviewbook);
-
-                mAdapter = new BookAdapter(getContext());
                 mAdapter.addData(User.getUserBooks());
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-                rcv.setLayoutManager(layoutManager);
-                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rcv.getContext(),
-                        layoutManager.getOrientation());
-                rcv.addItemDecoration(dividerItemDecoration);
-                rcv.setAdapter(mAdapter);
             }
-
 
 
         } else {

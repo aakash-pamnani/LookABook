@@ -39,7 +39,7 @@ public class SearchActivity extends AppCompatActivity implements InfiniteScrollL
 
         search = findViewById(R.id.search_view);
         rcv = findViewById(R.id.recyclerview);
-        mAdapter = new BookAdapter(this);
+        mAdapter = new BookAdapter(this, 0);
 
         checkNetwork();
         showProgressDialog(true);

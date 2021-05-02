@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         int theme = prefs.getInt("Theme", 0);
 
 
-        Log.d("THEME_value", theme + "");
         if (theme == 1) {
             setTheme(R.style.ThemeLight_LookABook);
         } else if (theme == 2) {
