@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -40,6 +42,27 @@ public class SingleBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Setting Theme
+        SharedPreferences prefs = getSharedPreferences("LookABook_Storage", Context.MODE_PRIVATE);
+        int theme = prefs.getInt("Theme", 0);
+
+
+        if (theme == 1) {
+            setTheme(R.style.ThemeLight_LookABook);
+        } else if (theme == 2) {
+            setTheme(R.style.ThemeDark_LookABook);
+        } else {
+            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    setTheme(R.style.ThemeDark_LookABook);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    setTheme(R.style.ThemeLight_LookABook);
+                    break;
+            }
+        }
+
         setContentView(R.layout.activity_single_book);
 
         checkNetwork();

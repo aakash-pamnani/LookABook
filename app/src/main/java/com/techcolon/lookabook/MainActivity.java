@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Setting Theme
         SharedPreferences prefs = getSharedPreferences("LookABook_Storage", Context.MODE_PRIVATE);
         int theme = prefs.getInt("Theme", 0);
 

@@ -1,7 +1,10 @@
 package com.techcolon.lookabook;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -41,6 +44,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Setting Theme
+        SharedPreferences prefs = getSharedPreferences("LookABook_Storage", Context.MODE_PRIVATE);
+        int theme = prefs.getInt("Theme", 0);
+
+
+        if (theme == 1) {
+            setTheme(R.style.ThemeLight_LookABook);
+        } else if (theme == 2) {
+            setTheme(R.style.ThemeDark_LookABook);
+        } else {
+            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    setTheme(R.style.ThemeDark_LookABook);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    setTheme(R.style.ThemeLight_LookABook);
+                    break;
+            }
+        }
+
         setContentView(R.layout.activity_login);
         logInButton = findViewById(R.id.loginbutton);
         phoneLayout = findViewById(R.id.phone);
