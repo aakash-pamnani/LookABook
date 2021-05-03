@@ -1,5 +1,6 @@
 package com.techcolon.lookabook;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -130,8 +131,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
 
                         if (fragment == 1) {//user book list fragment
                             intent.putExtra("isUserBook", true);
+                            intent.putExtra("BookIndex",getLayoutPosition());
                         }
                         isContext.startActivity(intent);
+
                     }
 
 

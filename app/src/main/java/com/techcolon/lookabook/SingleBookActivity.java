@@ -38,6 +38,7 @@ public class SingleBookActivity extends AppCompatActivity {
     private ImageView[] images = new ImageView[5];
     private Bitmap imageBitmap;
     private String firstName = null, lastName = null, phoneNumber = null;
+    private Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +69,24 @@ public class SingleBookActivity extends AppCompatActivity {
         checkNetwork();
 
         Intent i = getIntent();
-        Book book = (Book) i.getSerializableExtra("SingleBook");
+
         Boolean isUserBook = i.getBooleanExtra("isUserBook", false);
         toolbar = findViewById(R.id.topAppBar);
-        toolbar.setTitle(book.getTitleOfBook());
+
 
         if (isUserBook) {
             toolbar.inflateMenu(R.menu.singlebooklist_menu);
-
+            int index = i.getIntExtra("BookIndex",-1);
+            book = User.getUserBooks().get(index);
+            toolbar.setTitle(book.getTitleOfBook());
             toolbar.getMenu().findItem(R.id.editbook).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-
+                    Intent intent = new Intent(SingleBookActivity.this,EditBookActivity.class);
+                    intent.putExtra("BookToUpdate",book);
+                    startActivity(intent);
+//                    SingleBookActivity.this.recreate();
+                    finish();
                     return false;
                 }
             });
@@ -88,7 +95,7 @@ public class SingleBookActivity extends AppCompatActivity {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     if (Book.deleteBook(book)) {
-                        Toast.makeText(SingleBookActivity.this, "Book Deleted Succesfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SingleBookActivity.this, "Book Deleted Successfully", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(SingleBookActivity.this, "Unable to delete book", Toast.LENGTH_SHORT).show();
 
@@ -98,6 +105,8 @@ public class SingleBookActivity extends AppCompatActivity {
                 }
             });
         } else {
+            book = (Book) i.getSerializableExtra("SingleBook");
+            toolbar.setTitle(book.getTitleOfBook());
             toolbar.getMenu().clear();
         }
         showProgressDialog(true);

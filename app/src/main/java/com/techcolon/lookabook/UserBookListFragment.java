@@ -43,14 +43,17 @@ public class UserBookListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (User.getNoOfBooks() != 0) {
+        if (User.getUser()!=null && User.getNoOfBooks() != 0) {
             mAdapter.addNewData(User.getUserBooks());
             mAdapter.notifyDataSetChanged();
             noBooks.setVisibility(View.GONE);
             rcvId.setVisibility(View.VISIBLE);
         } else {
-            rcvId.setVisibility(View.GONE);
-            noBooks.setVisibility(View.VISIBLE);
+            if(User.getUser()!=null) {
+                rcvId.setVisibility(View.GONE);
+                noBooks.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }
@@ -58,7 +61,9 @@ public class UserBookListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = null;
+
+
+        View v;
         if (User.getUser() != null) {
             //user is not null(logged in)
             v = inflater.inflate(R.layout.fragment_user_book_list, container, false);
