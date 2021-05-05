@@ -1,10 +1,5 @@
 package com.techcolon.lookabook;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +18,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -195,6 +195,7 @@ public class EditBookActivity extends AppCompatActivity {
         fieldAutoComplete.setText(book.getField(),false);
         fieldAutoComplete.setAdapter(arrayAdapterFields);
 
+        departmentAutoComplete.setText(book.getDepartment(), false);
         departmentAutoComplete.setAdapter(arrayAdapterDepts);
 
         semesterAutoComplete.setText(book.getSemester(),false);

@@ -1,6 +1,6 @@
 package com.techcolon.lookabook;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -54,9 +54,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
 
         if (holder instanceof DataViewHolder) {
             final Book book = bookList.get(position);
-            ((DataViewHolder) holder).name.setText(book.getTitleOfBook());
-            ((DataViewHolder) holder).price.setText(book.getPrice() + "");
-            ((DataViewHolder) holder).semester.setText(book.getSemester());
+            ((DataViewHolder) holder).name.setText(book.getTitleOfBook().toUpperCase());
+            ((DataViewHolder) holder).price.setText(isContext.getString(R.string.RuppesSymbol) + book.getPrice());
+            ((DataViewHolder) holder).field.setText("Field : " + book.getField());
+            ((DataViewHolder) holder).department.setText("Department : " + book.getDepartment());
+            ((DataViewHolder) holder).semester.setText("Semester : " + book.getSemester());
+
         }
     }
 
@@ -118,20 +121,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
 
     public class DataViewHolder extends ParentViewHolder {
 
-        TextView name, semester, price;
+        TextView name, department, field, semester, price;
 
         public DataViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isContext!=null) {
+                    if (isContext != null) {
                         Intent intent = new Intent(isContext, SingleBookActivity.class);
                         intent.putExtra("SingleBook", bookList.get(getLayoutPosition()));
 
                         if (fragment == 1) {//user book list fragment
                             intent.putExtra("isUserBook", true);
-                            intent.putExtra("BookIndex",getLayoutPosition());
+                            intent.putExtra("BookIndex", getLayoutPosition());
                         }
                         isContext.startActivity(intent);
 
@@ -141,6 +144,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ParentViewHold
                 }
             });
             name = itemView.findViewById(R.id.nametv);
+            department = itemView.findViewById(R.id.departmenttv);
+            field = itemView.findViewById(R.id.fieldtv);
             semester = itemView.findViewById(R.id.semestertv);
             price = itemView.findViewById(R.id.pricetv);
         }

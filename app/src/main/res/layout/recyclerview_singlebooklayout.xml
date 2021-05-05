@@ -18,15 +18,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textSize="24dp"
-            android:textStyle="bold" />
+            style="@style/LookABook.primaryTextView"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/fieldtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Field" />
+
+        <TextView
+            android:id="@+id/departmenttv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Department" />
 
         <TextView
             android:id="@+id/semestertv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Semester"
-            android:textSize="24dp" />
+            android:text="Semester" />
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -43,8 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="Price"
-            android:textColor="@color/purple_500"
-            android:textSize="24dp" />
+            style="@style/LookABook.priceText" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

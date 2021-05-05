@@ -6,4 +6,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+
+    <!--    custom styling start from here-->
+
+
+    <dimen name="textPrimary">16sp</dimen>
+    <dimen name="textSecondary">14sp</dimen>
+
 </resources>
