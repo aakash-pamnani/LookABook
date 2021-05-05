@@ -53,11 +53,19 @@
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6
         </item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
 
     </style>
 
     <style name="LookABook.primaryTextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6
+        </item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+
+    </style>
+
+    <style name="LookABook.secondaryTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1
         </item>
 
     </style>

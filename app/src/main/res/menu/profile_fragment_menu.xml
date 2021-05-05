@@ -6,10 +6,11 @@
         android:contentDescription="Edit Profile"
         android:icon="@drawable/ic_baseline_edit_24"
         android:title="Edit"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:id="@+id/logout"
         android:contentDescription="Logout"
         android:title="Logout"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

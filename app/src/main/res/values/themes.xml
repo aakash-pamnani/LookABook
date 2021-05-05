@@ -17,24 +17,14 @@
 
     </style>
 
-    <style name="ThemeLight_LookABook.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="ThemeLight_LookABook.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="ThemeLight_LookABook.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
     <style name="ThemeDark_LookABook" parent="ThemeOverlay.MaterialComponents.Dark">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/blue_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/violet_200</item>
+        <item name="colorSecondaryVariant">@color/violet_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
